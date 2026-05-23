@@ -27,10 +27,3 @@ build/
 Thumbs.db
 .vscode/
 !.vscode/extensions.json
-<<<<<<< HEAD
-
-*.mp4
-Presentation-Video/
-Presention-Video/
-=======
->>>>>>> 26f705daafccc5a5873b46fa3b515807e6be8565
