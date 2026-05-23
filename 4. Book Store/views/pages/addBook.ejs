@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+
+    <%- include('../partials/navbar') %>
+
+    <main>
+        <div class="container" id="add-view">
+
+            <form class="structured-form" action="/add-Book" method="POST" enctype="multipart/form-data">
+                
+                <div class="form-layout">
+                    <div class="form-details">
+                        <h3 class="form-section-title">Manuscript Details</h3>
+                        
+                        <div class="form-group full-width">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" name="Title" required placeholder="e.g. The Great Gatsby">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="author">Author</label>
+                                <input type="text" id="author" name="Author" required placeholder="e.g. F. Scott Fitzgerald">
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <input type="text" id="category" name="Category" required placeholder="e.g. Fiction, Classic">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="price">Price ($)</label>
+                                <input type="number" id="price" name="Price" step="0.01" min="0" required placeholder="0.00">
+                            </div>
+                            <div class="form-group">
+                                <label for="quantity">Quantity in Stock</label>
+                                <input type="number" id="quantity" name="Quantity" min="0" required placeholder="0">
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width no-bottom-margin">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="Description" required placeholder="Provide a brief synopsis of the book..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-media">
+                        <h3 class="form-section-title">Cover Artwork</h3>
+                        
+                        <div class="upload-area">
+                            <input type="file" id="image" name="Image" accept="image/*" required class="hidden-file-input">
+                            
+                            <div class="upload-placeholder" id="upload-placeholder">
+                                <div class="upload-icon">⇪</div>
+                                <span>Select a file</span>
+                                <small>JPEG, PNG, WEBP accepted</small>
+                            </div>
+
+                            <img id="image-preview" class="is-hidden" src="" alt="Cover Preview">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Add to Archive</button>
+            </form>
+        </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+
+    <script>
+        
+        document.getElementById('image').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const imagePreview = document.getElementById('image-preview');
+            const placeholder = document.getElementById('upload-placeholder');
+
+            if (file) {
+                // Create temp URL
+                const objectURL = URL.createObjectURL(file);
+                
+                // Set image source and show it
+                imagePreview.src = objectURL;
+                imagePreview.classList.remove('is-hidden');
+                imagePreview.classList.add('is-visible');
+                
+                // Hide the placeholder text/icon
+                placeholder.classList.remove('is-visible');
+                placeholder.classList.add('is-hidden');
+
+                // Cleanup memory
+                imagePreview.onload = function() {
+                    URL.revokeObjectURL(imagePreview.src);
+                }
+            } else {
+                // If user cancels selection, revert to placeholder
+                imagePreview.src = '';
+                imagePreview.classList.remove('is-visible');
+                imagePreview.classList.add('is-hidden');
+                placeholder.classList.remove('is-hidden');
+                placeholder.classList.add('is-visible');
+            }
+        });
+    </script>
+</body>
+</html>

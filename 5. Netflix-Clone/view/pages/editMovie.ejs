@@ -1,0 +1,85 @@
+<%- include("../partials/header.ejs") %>
+
+<main class="page-shell add-movie-page">
+<div class="form-container">
+    <div class="form-header">
+        <h2>Edit Movie</h2>
+        <p>Update the details below and submit the form.</p>
+    </div>
+
+    <form action="/movies/edit/<%= movie._id %>" method="POST" enctype="multipart/form-data">
+        <div class="form-grid">
+            <div class="input-wrapper full-width">
+                <label>Movie Title</label>
+                <input type="text" name="name" value="<%= movie.name %>" placeholder="e.g. Stranger Things" required>
+            </div>
+
+            <div class="input-wrapper full-width">
+        <label>Movie Poster</label>
+        
+        <img id="posterPreview" class="poster-preview" src="/uploads/<%= movie.image %>" alt="<%= movie.name %> poster" />
+
+        <input id="posterInput" type="file" name="image" accept="image/*">
+        
+        <small>Leave empty if you don’t want to change image</small>
+    </div>
+
+            <div class="input-wrapper full-width">
+                <label>Synopsis</label>
+                <textarea name="desc" placeholder="Write a brief overview..." required><%= movie.desc %></textarea>
+            </div>
+
+            <div class="input-wrapper">
+                <label>Genre</label>
+                <select name="category" required>
+                    <option value="" disabled>Select Genre</option>
+                    <option value="Action" <%= movie.category === 'Action' ? 'selected' : '' %>>Action</option>
+                    <option value="Comedy" <%= movie.category === 'Comedy' ? 'selected' : '' %>>Comedy</option>
+                    <option value="Drama" <%= movie.category === 'Drama' ? 'selected' : '' %>>Drama</option>
+                    <option value="Thriller" <%= movie.category === 'Thriller' ? 'selected' : '' %>>Thriller</option>
+                    <option value="Horror" <%= movie.category === 'Horror' ? 'selected' : '' %>>Horror</option>
+                </select>
+            </div>
+
+            <div class="input-wrapper">
+                <label>IMDb Rating</label>
+                <input type="number" name="rating" value="<%= movie.rating %>" placeholder="1 - 10" min="1" max="10" step="0.1" required>
+            </div>
+
+            <div class="input-wrapper">
+                <label>Release Year</label>
+                <input type="text" name="year" value="<%= movie.year %>" placeholder="YYYY" required>
+            </div>
+
+            <div class="input-wrapper">
+                <label>Content Status</label>
+                <select name="isTrending" required>
+                    <option value="false" <%= !movie.isTrending ? 'selected' : '' %>>Standard</option>
+                    <option value="true" <%= movie.isTrending ? 'selected' : '' %>>Trending Now</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="window.history.back()">Cancel</button>
+            <button type="submit" class="btn-submit">Update Content</button>
+        </div>
+    </form>
+</div>
+</main>
+
+<script>
+    const posterInput = document.getElementById("posterInput");
+    const posterPreview = document.getElementById("posterPreview");
+
+    posterInput.addEventListener("change", () => {
+        const file = posterInput.files[0];
+
+        if (!file) return;
+
+        posterPreview.src = URL.createObjectURL(file);
+    });
+</script>
+
+</body>
+</html>

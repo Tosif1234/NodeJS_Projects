@@ -1,0 +1,50 @@
+<%- include('partials/header') %>
+
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-xl-6">
+        <div class="card form-card shadow-lg border-0">
+            <div class="card-body p-4 p-md-5">
+                <p class="eyebrow mb-2">Task Update Module</p>
+                <h2 class="mb-2 fw-bold">Edit Task</h2>
+                <p class="text-muted mb-4">Update the task details and control its current progress status.</p>
+
+                <% if (error) { %>
+                <div class="alert alert-danger" role="alert"><%= error %></div>
+                <% } %>
+
+                <form action="/update/<%= task.id %>" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Task Title</label>
+                        <input type="text" name="title" class="form-control" value="<%= task.title %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Task Description</label>
+                        <textarea name="description" class="form-control" rows="4"><%= task.description %></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Task Priority</label>
+                        <select name="priority" class="form-select">
+                            <option value="Low" <%= task.priority === 'Low' ? 'selected' : '' %>>Low</option>
+                            <option value="Medium" <%= task.priority === 'Medium' ? 'selected' : '' %>>Medium</option>
+                            <option value="High" <%= task.priority === 'High' ? 'selected' : '' %>>High</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Task Status</label>
+                        <select name="status" class="form-select">
+                            <option value="Pending" <%= task.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                            <option value="In Progress" <%= task.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+                            <option value="Completed" <%= task.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/" class="btn btn-outline-secondary">Back to Dashboard</a>
+                        <button type="submit" class="btn btn-accent">Update Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

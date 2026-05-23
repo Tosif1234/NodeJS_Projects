@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+
+    <%- include('../partials/navbar') %>
+
+    <main>
+        <div class="container">
+            <a href="/" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to Library
+            </a>
+
+            <div class="details-wrapper">
+                
+                <div class="details-cover-container">
+                    <% if (book.Image) { %>
+                        <img src="/uploads/<%= book.Image %>" alt="<%= book.Title %> Cover" class="details-cover">
+                    <% } else { %>
+                        <div class="details-cover no-cover">No Cover</div>
+                    <% } %>
+                </div>
+
+                <div class="details-info">
+                    
+                    <div class="tag"><%= book.Category.join(', ') %></div>
+                    
+                    <h1 class="details-title"><%= book.Title %></h1>
+                    
+                    <div class="details-author">
+                        <i class="fa-regular fa-user"></i>
+                        <%= book.Author %>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="stats-row">
+                        <div class="stat-group">
+                            <span class="stat-label">Current Price</span>
+                            <span class="stat-value price">₹<%= book.Price.toFixed(2) %></span>
+                        </div>
+                        <div class="stat-group">
+                            <span class="stat-label">Availability</span>
+                            <span class="stat-value"><%= book.Quantity %> in stock</span>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="stat-group">
+                        <span class="stat-label story-label">The Story</span>
+                        <p class="story-content">
+                            <%= book.Description %>
+                        </p>
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="/edit-Book/<%= book._id %>" class="btn btn-edit">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                            Edit Details
+                        </a>
+                        
+                        <form action="/delete/<%= book._id %>" method="POST" class="delete-book-form">
+                            <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this title?');">
+                                <i class="fa-regular fa-trash-can"></i>
+                                Delete Book
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+
+</body>
+</html>

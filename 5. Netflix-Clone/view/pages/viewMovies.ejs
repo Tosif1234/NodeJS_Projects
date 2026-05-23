@@ -1,0 +1,51 @@
+<%- include("../partials/header.ejs") %>
+
+<main class="page-shell view-movies-page">
+<h2>Featured Movies</h2>
+<% console.log('movies in viewMovies:', movies); %>
+
+<table class="movies-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Rating</th>
+            <th>Year</th>
+            <th>Trending</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% if (movies.length) { %>
+            <% movies.forEach((movie) => { %>
+                <tr>
+                    <td><%= movie.name %></td>
+                    <td><img class="table-poster" src="/uploads/<%= movie.image %>" width="80" alt="<%= movie.name %>"></td>
+                    <td><%= movie.desc %></td>
+                    <td><%= movie.category %></td>
+                    <td><%= movie.rating %></td>
+                    <td><%= movie.year %></td>
+                    <td><%= movie.isTrending ? "Yes" : "No" %></td>
+                    <td class="action-btn">
+                        <a href="/movies/edit/<%= movie._id %>" class="btn edit-btn">Edit</a>
+                        <form action="/movies/delete/<%= movie._id %>" method="POST" class="inline-form">
+                            <button type="submit" class="btn delete-btn" onclick="return confirm('Are you sure you want to delete this movie?');">Delete</button>
+                        </form>
+                    </td>
+                    
+                </tr>
+            <% }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="8">No movies found.</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+</main>
+
+</body>
+</html>

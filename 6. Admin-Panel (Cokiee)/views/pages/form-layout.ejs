@@ -1,0 +1,159 @@
+<%- include('../partials/header') %>
+
+
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+            <!-- SideBar -->
+<%- include('../partials/sidebar')%>
+    <!-- / SideBar -->
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+<%- include('../partials/navbar')%>
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+        <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+          
+          <div class="row">
+            <div class="col-lg-12 mx-auto"> <!-- Centered the form and capped width -->
+              <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center border-bottom mb-4">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar avatar-md me-3">
+                      <span class="avatar-initial rounded bg-label-primary"><i class="ri-user-add-line ri-24px"></i></span>
+                    </div>
+                    <div>
+                      <h5 class="mb-0">Add New User</h5>
+                      <small class="text-muted">Fill in the details to create a new account</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  <form action="/users/add" method="POST" enctype="multipart/form-data">
+                    
+                    <!-- Section: Personal Info -->
+                    <h6 class="text-uppercase fw-semibold mb-4 text-primary">1. Personal Information</h6>
+                    <div class="row g-4 mb-4">
+                      <div class="col-md-6">
+                        <div class="form-floating form-floating-outline">
+                          <input type="text" id="add-user-name" name="fullName" class="form-control" placeholder="John Doe" required />
+                          <label for="add-user-name">Full Name</label>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-floating form-floating-outline">
+                          <input type="tel" id="add-user-phone" name="phoneNumber" class="form-control" placeholder="+1 (123) 456-7890" />
+                          <label for="add-user-phone">Phone Number</label>
+                        </div>
+                        
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-floating form-floating-outline">
+                          <input type="email" id="add-user-email" name="email" class="form-control" placeholder="john.doe@example.com" required />
+                          <label for="add-user-email">Email Address</label>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-floating form-floating-outline">
+                          <input type="password" id="add-user-pwd" name="password" class="form-control" placeholder="******" required />
+                          <label for="add-user-email">Password</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr class="my-5" />
+
+                    <!-- Section: Account Settings -->
+                    <h6 class="text-uppercase fw-semibold mb-4 text-primary">2. Account Settings</h6>
+                    <div class="row g-4 mb-4">
+                      <div class="col-md-4">
+                        <div class="form-floating form-floating-outline">
+                          <select id="add-user-role" name="role" class="form-select" required>
+                            <option value="" disabled selected>Select Role</option>
+                            <option value="Admin">Admin</option>
+                            <option value="User">User</option>
+                            <option value="Editor">Editor</option>
+                          </select>
+                          <label for="add-user-role">Role</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating form-floating-outline">
+                          <select id="add-user-plan" name="plan" class="form-select" required>
+                            <option value="" disabled selected>Select Plan</option>
+                            <option value="Basic">Basic</option>
+                            <option value="Standard">Standard</option>
+                            <option value="Premium">Premium</option>
+                          </select>
+                          <label for="add-user-plan">Subscription Plan</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating form-floating-outline">
+                          <select id="add-user-status" name="status" class="form-select" required>
+                            <option value="" disabled selected>Select Status</option>
+                            <option value="Active">Active</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Blocked">Blocked</option>
+                          </select>
+                          <label for="add-user-status">Account Status</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                      <!-- Image Upload -->
+                      <div class="col-12">
+                        <label class="form-label text-muted mb-2">Profile Picture</label>
+                        <div class="input-group input-group-merge">
+                          <span class="input-group-text"><i class="ri-image-line"></i></span>
+                          <input type="file" id="add-user-image" name="profileImage" class="form-control" accept="image/*" required />
+                        </div>
+                      </div>
+
+                      <!-- Notes -->
+                      <div class="col-12">
+                        <div class="form-floating form-floating-outline">
+                          <textarea id="add-user-notes" name="note" class="form-control" placeholder="Add any extra details here..." style="height: 100px"></textarea>
+                          <label for="add-user-notes">Internal Notes</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="pt-3">
+                      <button type="submit" class="btn btn-primary me-sm-3 me-1">
+                        <i class="ri-save-line me-1"></i> Create User
+                      </button>
+                      <button type="reset" class="btn btn-outline-secondary">Discard</button>
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- / Content -->
+          <%- include('../partials/footer') %>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+
+<%- include('../partials/scripts') %>

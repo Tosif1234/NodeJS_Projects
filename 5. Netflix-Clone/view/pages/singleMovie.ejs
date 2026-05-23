@@ -1,0 +1,49 @@
+<%- include("../partials/header.ejs") %>
+
+<main class="page-shell single-movie-page">
+    <div class="single-movie-container">
+        <div class="single-movie-hero">
+            <div class="single-movie-poster-wrap">
+                <img 
+  src="<%= movie.image.includes('uploads') || movie.image.startsWith('/') 
+        ? movie.image 
+        : '/uploads/' + movie.image %>" 
+  class="single-movie-poster"
+/>
+            </div>
+            
+            <div class="single-movie-details">
+                <p class="single-movie-tag">Featured Movie</p>
+                <h1 class="single-movie-title"><%= movie.name %></h1>
+                
+                <div class="single-movie-meta">
+                    <span class="meta-item">
+                        <strong>Release Year:</strong> <%= movie.year %>
+                    </span>
+                    <span class="meta-item">
+                        <strong>Genre:</strong> <%= movie.category %>
+                    </span>
+                    <span class="meta-item">
+                        <strong>Rating:</strong> <%= movie.rating %> / 10
+                    </span>
+                    <span class="meta-item">
+                        <strong>Status:</strong> <%= movie.isTrending ? "Trending Now" : "Standard" %>
+                    </span>
+                </div>
+
+                <div class="single-movie-description">
+                    <h2>Synopsis</h2>
+                    <p><%= movie.desc %></p>
+                </div>
+
+                <div class="single-movie-actions">
+                    <a href="/" class="btn btn-primary">Back to Home</a>
+                    <a href="/movies/view" class="btn btn-secondary">View All Movies</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+:root {
+    --bg-page: #f3efe7;
+    --bg-surface: rgba(255, 255, 255, 0.88);
+    --text-main: #1c1f2a;
+    --text-soft: #5f6473;
+    --border-soft: rgba(28, 31, 42, 0.08);
+    --navy: #123458;
+    --navy-deep: #0d2744;
+    --gold: #f0b429;
+    --gold-soft: #fff0c2;
+    --green-soft: #dff7ea;
+    --blue-soft: #dbeafe;
+    --red-soft: #fde2e1;
+    --shadow-soft: 0 18px 40px rgba(18, 52, 88, 0.08);
+    --radius-lg: 22px;
+    --radius-md: 16px;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(240, 180, 41, 0.18), transparent 25%),
+        linear-gradient(180deg, #faf6ef 0%, #f3efe7 100%);
+    color: var(--text-main);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.app-navbar {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+}
+
+.brand-mark {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+}
+
+.btn-accent {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #1f2937;
+    font-weight: 700;
+}
+
+.btn-accent:hover,
+.btn-accent:focus {
+    background: #e1a616;
+    border-color: #e1a616;
+    color: #111827;
+}
+
+.hero-panel,
+.card {
+    background: var(--bg-surface);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-soft);
+}
+
+.hero-panel {
+    padding: 2rem;
+    margin-top: 1rem;
+}
+
+.page-title {
+    font-size: clamp(1.8rem, 2.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.page-subtitle,
+.stat-card small {
+    color: var(--text-soft);
+}
+
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.stat-card {
+    overflow: hidden;
+}
+
+.stat-card .card-body {
+    padding: 1.5rem;
+}
+
+.stat-label {
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.stat-card-total {
+    background: linear-gradient(135deg, #123458, #1f5f96);
+    color: #fff;
+}
+
+.stat-card-total small,
+.stat-card-completed small {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.stat-card-pending {
+    background: linear-gradient(135deg, #fff2cc, #f8df8d);
+}
+
+.stat-card-completed {
+    background: linear-gradient(135deg, #157347, #1c9c5c);
+    color: #fff;
+}
+
+.table-card {
+    overflow: hidden;
+}
+
+.table thead th {
+    border-top: none;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-soft);
+    padding: 1rem 1.2rem;
+}
+
+.table tbody td {
+    padding: 1rem 1.2rem;
+    vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.task-badge {
+    padding: 0.55rem 0.8rem;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.badge-priority-high {
+    background: var(--red-soft);
+    color: #9f1239;
+}
+
+.badge-priority-medium {
+    background: var(--gold-soft);
+    color: #8a5a00;
+}
+
+.badge-priority-low {
+    background: var(--blue-soft);
+    color: #1d4ed8;
+}
+
+.badge-status-pending {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.badge-status-progress {
+    background: var(--blue-soft);
+    color: #1e40af;
+}
+
+.badge-status-completed {
+    background: var(--green-soft);
+    color: #166534;
+}
+
+.form-card {
+    margin-top: 2rem;
+}
+
+.form-control,
+.form-select {
+    border-radius: 14px;
+    border: 1px solid rgba(18, 52, 88, 0.16);
+    padding: 0.9rem 1rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: rgba(18, 52, 88, 0.45);
+    box-shadow: 0 0 0 0.2rem rgba(18, 52, 88, 0.12);
+}
+
+.alert {
+    border-radius: var(--radius-md);
+}
+
+@media (max-width: 767.98px) {
+    .hero-panel {
+        padding: 1.4rem;
+    }
+
+    .table thead th,
+    .table tbody td {
+        white-space: nowrap;
+    }
+}

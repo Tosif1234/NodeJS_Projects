@@ -1,0 +1,55 @@
+    <!-- Core JS -->
+
+    <script src="/assets/libs/jquery/jquery.js"></script>
+
+    <script src="/assets/libs/popper/popper.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+    <script src="/assets/libs/node-waves/node-waves.js"></script>
+
+    <script src="/assets/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="/assets/js/menu.js"></script>
+
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="/assets/libs/apex-charts/apexcharts.js"></script>
+
+    <!-- Main JS -->
+
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/theme-switcher.js"></script>
+
+    <!-- Page JS -->
+    <script src="/assets/js/dashboards-analytics.js"></script>
+
+    <!-- Place this tag before closing body tag for github widget button. -->
+    <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const success = "<%= flashMessages.success.length ? flashMessages.success[0] : '' %>";
+
+    const error = "<%= flashMessages.error.length ? flashMessages.error[0] : '' %>";
+
+    if (success) {
+        Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: success,
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
+
+    if (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error
+        });
+    }
+</script>
+  </body>
+</html>

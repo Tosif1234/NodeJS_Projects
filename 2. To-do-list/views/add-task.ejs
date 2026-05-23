@@ -1,0 +1,42 @@
+<%- include('partials/header') %>
+
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-xl-6">
+        <div class="card form-card shadow-lg border-0">
+            <div class="card-body p-4 p-md-5">
+                <p class="eyebrow mb-2">Task Creation Module</p>
+                <h2 class="mb-2 fw-bold">Add New Task</h2>
+                <p class="text-muted mb-4">Create a task with clear details so it appears instantly on the dashboard.</p>
+
+                <% if (error) { %>
+                <div class="alert alert-danger" role="alert"><%= error %></div>
+                <% } %>
+
+                <form action="/add" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Task Title</label>
+                        <input type="text" name="title" class="form-control" value="<%= formData.title %>" placeholder="Enter task title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Task Description</label>
+                        <textarea name="description" class="form-control" rows="4" placeholder="Write a short task description"><%= formData.description %></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Task Priority</label>
+                        <select name="priority" class="form-select">
+                            <option value="Low" <%= formData.priority === 'Low' ? 'selected' : '' %>>Low</option>
+                            <option value="Medium" <%= formData.priority === 'Medium' ? 'selected' : '' %>>Medium</option>
+                            <option value="High" <%= formData.priority === 'High' ? 'selected' : '' %>>High</option>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-accent">Save Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

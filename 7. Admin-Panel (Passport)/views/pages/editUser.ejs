@@ -1,0 +1,176 @@
+<%- include('../partials/header') %>
+
+
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+            <!-- SideBar -->
+<%- include('../partials/sidebar')%>
+    <!-- / SideBar -->
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+<%- include('../partials/navbar')%>
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+        <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+          
+          <div class="row">
+            <div class="col-lg-12 mx-auto"> <!-- Centered the form and capped width -->
+              <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center border-bottom mb-4">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar avatar-md me-3">
+                      <span class="avatar-initial rounded bg-label-primary"><i class="ri-user-settings-line ri-24px"></i></span>
+                    </div>
+                    <div>
+                      <h5 class="mb-0">Edit User</h5>
+                      <small class="text-muted">Update profile and account details</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-body">
+  <form action="/users/update/<%= user._id %>" method="POST" enctype="multipart/form-data">
+    
+    <!-- Header Profile Preview Section -->
+    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-4 mb-5 border-bottom pb-4">
+      <img 
+        src="<%= user.Image ? '/uploads/' + user.Image : '/assets/img/avatars/1.png' %>" 
+        alt="user-avatar" 
+        class="d-block w-px-100 h-px-100 rounded shadow" 
+        id="currentPreview"
+        style="object-fit: cover;"
+      />
+      <div class="button-wrapper">
+        <label for="edit-user-image" class="btn btn-primary me-2 mb-3" tabindex="0">
+          <span class="d-none d-sm-block">Change Photo</span>
+          <i class="ri-upload-2-line d-block d-sm-none"></i>
+          <input type="file" id="edit-user-image" name="profileImage" class="account-file-input" hidden accept="image/png, image/jpeg" />
+        </label>
+        <div class="text-muted small">Allowed JPG or PNG. Max size 800KB.</div>
+      </div>
+    </div>
+
+    <!-- Section: Personal Info -->
+    <h6 class="text-uppercase fw-semibold mb-4 text-primary">Profile Details</h6>
+    <div class="row g-4 mb-5">
+      <div class="col-md-6">
+        <div class="form-floating form-floating-outline">
+          <input type="text" id="fullName" name="fullName" class="form-control" value="<%= user.fullName %>" required />
+          <label for="fullName">Full Name</label>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="form-floating form-floating-outline">
+          <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" value="<%= user.phoneNumber %>" />
+          <label for="phoneNumber">Phone Number</label>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-floating form-floating-outline">
+          <input type="email" id="email" name="email" class="form-control" value="<%= user.email %>" required />
+          <label for="email">Email Address</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Account Settings -->
+    <h6 class="text-uppercase fw-semibold mb-4 text-primary">Account Details</h6>
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="form-floating form-floating-outline">
+          <select id="role" name="role" class="form-select" required>
+            <option value="Admin" <%= user.role === 'Admin' ? 'selected' : '' %>>Admin</option>
+            <option value="User" <%= user.role === 'User' ? 'selected' : '' %>>User</option>
+            <option value="Editor" <%= user.role === 'Editor' ? 'selected' : '' %>>Editor</option>
+          </select>
+          <label for="role">Role</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating form-floating-outline">
+          <select id="plan" name="plan" class="form-select" required>
+            <option value="Basic" <%= user.plan === 'Basic' ? 'selected' : '' %>>Basic</option>
+            <option value="Standard" <%= user.plan === 'Standard' ? 'selected' : '' %>>Standard</option>
+            <option value="Premium" <%= user.plan === 'Premium' ? 'selected' : '' %>>Premium</option>
+          </select>
+          <label for="plan">Subscription Plan</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating form-floating-outline">
+          <select id="status" name="status" class="form-select" required>
+            <option value="Active" <%= user.status === 'Active' ? 'selected' : '' %>>Active</option>
+            <option value="Pending" <%= user.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+            <option value="Blocked" <%= user.status === 'Blocked' ? 'selected' : '' %>>Blocked</option>
+          </select>
+          <label for="status">Account Status</label>
+        </div>
+      </div>
+
+      <div class="col-12 mt-4">
+        <div class="form-floating form-floating-outline">
+          <textarea id="note" name="note" class="form-control" style="height: 100px"><%= user.note %></textarea>
+          <label for="note">Notes</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-end gap-3 border-top pt-4">
+      <a href="/users" class="btn btn-outline-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary px-5">
+        Save Changes
+      </button>
+    </div>
+  </form>
+</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- / Content -->
+          <%- include('../partials/footer') %>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+
+    <script>
+  const fileInput = document.getElementById('edit-user-image');
+  const previewImg = document.getElementById('currentPreview');
+
+  fileInput.addEventListener('change', function () {
+    const file = this.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        previewImg.src = e.target.result;
+      }
+
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+<%- include('../partials/scripts') %>

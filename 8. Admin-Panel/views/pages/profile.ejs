@@ -1,0 +1,139 @@
+<%- include('../partials/header') %>
+
+<%
+  const profileImage = user && user.Image ? '/uploads/' + user.Image : '/assets/img/avatars/1.png';
+%>
+
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="layout-page">
+      <%- include('../partials/navbar') %>
+
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="nav-align-top">
+                <ul class="nav nav-pills flex-column flex-md-row mb-6 gap-2 gap-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="/profile">
+                      <i class="icon-base ri ri-user-3-line icon-sm me-1_5"></i>My Profile
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="card mb-6">
+                <div class="card-body">
+                  <div class="d-flex align-items-start align-items-sm-center gap-6">
+                    <img
+                      src="<%= profileImage %>"
+                      alt="user-avatar"
+                      class="d-block w-px-100 h-px-100 rounded object-fit-cover"
+                      id="uploadedAvatar" />
+                    <div>
+                      <h5 class="mb-1"><%= user.fullName %></h5>
+                      <p class="mb-1 text-body-secondary"><%= user.email %></p>
+                      <span class="badge bg-label-primary"><%= user.role %></span>
+                      <span class="badge bg-label-<%= user.status === 'Active' ? 'success' : 'secondary' %>"><%= user.status %></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-body pt-0">
+                  <form action="/profile" method="POST" enctype="multipart/form-data">
+                    <div class="row mt-1 g-5">
+                      <div class="col-md-6 form-control-validation">
+                        <div class="form-floating form-floating-outline">
+                          <input
+                            class="form-control"
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            value="<%= user.fullName %>"
+                            required
+                            autofocus />
+                          <label for="fullName">Full Name</label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-floating form-floating-outline">
+                          <input
+                            class="form-control"
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="<%= user.email %>"
+                            placeholder="name@example.com"
+                            required />
+                          <label for="email">Email</label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="input-group input-group-merge">
+                          <div class="form-floating form-floating-outline">
+                            <input
+                              type="number"
+                              id="phoneNumber"
+                              name="phoneNumber"
+                              class="form-control"
+                              value="<%= user.phoneNumber %>"
+                              required />
+                            <label for="phoneNumber">Phone Number</label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label for="profileImage" class="form-label">Profile Image</label>
+                        <input class="form-control" type="file" id="profileImage" name="profileImage" accept="image/png, image/jpeg, image/gif" />
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-floating form-floating-outline">
+                          <input class="form-control" type="text" value="<%= user.role %>" disabled />
+                          <label>Role</label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-floating form-floating-outline">
+                          <input class="form-control" type="text" value="<%= user.plan %>" disabled />
+                          <label>Plan</label>
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <div class="form-floating form-floating-outline">
+                          <textarea class="form-control" id="note" name="note" style="height: 110px"><%= user.note %></textarea>
+                          <label for="note">Note</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mt-6">
+                      <button type="submit" class="btn btn-primary me-3">Save changes</button>
+                      <a href="/dashboard" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%- include('../partials/footer') %>
+        <div class="content-backdrop fade"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+
+<%- include('../partials/scripts') %>

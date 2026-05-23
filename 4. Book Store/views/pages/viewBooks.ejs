@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+
+    <%- include('../partials/navbar') %>
+
+    <main>
+        <div class="container">
+
+            <div class="table-container">
+                <table class="elegant-table">
+                    <thead>
+                        <tr>
+                            <th>Cover</th>
+                            <th>Title & Author</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (typeof books !== 'undefined' && books.length > 0) { %>
+                            <% books.forEach(book => { %>
+                                <tr>
+                                    <td>
+                                        <img src="/uploads/<%= book.Image %>" alt="<%= book.Title %>" class="table-thumb">
+                                    </td>
+                                    <td>
+                                        <div class="table-title"><%= book.Title %></div>
+                                        <div class="table-author"><%= book.Author %></div>
+                                    </td>
+                                    <td>
+                                        <span class="table-category"><%= Array.isArray(book.Category) ? book.Category.join(', ') : book.Category %></span>
+                                    </td>
+                                    <td>$<%= book.Price.toFixed(2) %></td>
+                                    <td><%= book.Quantity %></td>
+                                    <td>
+                                        <div class="table-actions text-right">
+                                            <a href="/edit-Book/<%= book._id %>" class="action-btn edit">Edit</a>
+                                            <form action="/delete/<%= book._id %>" method="POST" class="inline-delete-form">
+                                                <button type="submit" class="action-btn delete">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+        <td colspan="6" class="table-empty-cell">
+            <div class="table-empty-title">The Inventory is Empty</div>
+            <div class="table-empty-subtitle">There are no books currently in the database.</div>
+            <a href="/add-book" class="table-empty-btn">+ Archive a Title</a>
+        </td>
+    </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+
+</body>
+</html>

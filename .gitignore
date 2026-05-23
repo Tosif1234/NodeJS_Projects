@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Build and cache output
+dist/
+build/
+.cache/
+.parcel-cache/
+.vite/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+!.vscode/extensions.json
+<<<<<<< HEAD
+
+*.mp4
+Presentation-Video/
+Presention-Video/
+=======
+>>>>>>> 26f705daafccc5a5873b46fa3b515807e6be8565

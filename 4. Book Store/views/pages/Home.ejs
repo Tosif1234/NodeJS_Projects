@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+
+    <%- include('../partials/navbar') %>
+
+    <main>
+        <div class="container">
+            
+            <% if (typeof books !== 'undefined' && books.length > 0) { %>
+                <div class="section-header">
+                    <h1>Curated Selections</h1>
+                    <p>Discover Our Finest Literature</p>
+                </div>
+                
+                <div class="row">
+                    <% books.forEach((book, index) => { %>
+                        <div class="col">
+                            <a href="/book/<%= book.id%>" class="book-card-link">
+                                <div class="card">
+    <div class="book-cover cover-<%= (index % 4) + 1 %>">
+        <img src="/uploads/<%= book.Image %>" class="book-img" alt="<%= book.Title %>">
+        
+        <div class="cover-overlay">
+            <i class="fa-solid fa-book-open overlay-icon"></i>
+        </div>
+    </div>
+    
+    <div class="book-info">
+        <div class="info-top">
+            <h3 class="info-title"><%= book.Title %></h3>
+            <p class="info-author"><i class="fa-solid fa-feather-pointed fa-sm"></i> <%= book.Author %></p>
+        </div>
+        <div class="info-bottom">
+            <span class="info-price"><i class="fa-solid fa-indian-rupee-sign fa-sm"></i> <%= book.Price %></span>
+            <span class="info-action">Details <i class="fa-solid fa-arrow-right-long icon-arrow"></i></span>
+        </div>
+    </div>
+</div>
+                            </a>
+                        </div>
+                    <% }) %>
+                </div>
+                
+            <% } else { %>
+                
+                <div class="empty-state-wrapper">
+                    <div class="empty-state-icon">❖</div>
+                    <h2 class="empty-state-title">The Archive <br>is Empty</h2>
+                    <p class="empty-state-subtitle">There are no titles currently recorded in the database.</p>
+                    <a href="/add-book" class="btn-add empty-state-btn">Archive Your First Title</a>
+                </div>
+
+            <% } %>
+
+        </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<%- include('partials/header') %>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white shadow-sm border-0">
+            <div class="card-body">
+                <h6>Total Tasks</h6>
+                <h2 class="fw-bold"><%= stats.total %></h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-warning text-dark shadow-sm border-0">
+            <div class="card-body">
+                <h6>Pending</h6>
+                <h2 class="fw-bold"><%= stats.pending %></h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white shadow-sm border-0">
+            <div class="card-body">
+                <h6>Completed</h6>
+                <h2 class="fw-bold"><%= stats.completed %></h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Task Details</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% tasks.forEach(task => { %>
+                <tr>
+                    <td><small class="text-muted">#<%= task.id.toString().slice(-4) %></small></td>
+                    <td>
+                        <div class="fw-bold"><%= task.title %></div>
+                        <small class="text-muted"><%= task.description %></small>
+                    </td>
+                    <td>
+                        <span class="badge <%= task.priority === 'High' ? 'bg-danger' : 'bg-info' %>">
+                            <%= task.priority %>
+                        </span>
+                    </td>
+                    <td>
+                        <% let badgeClass = task.status === 'Completed' ? 'bg-success' : (task.status === 'In Progress' ? 'bg-primary' : 'bg-secondary') %>
+                        <span class="badge <%= badgeClass %>"><%= task.status %></span>
+                    </td>
+                    <td>
+                        <a href="/edit/<%= task.id %>" class="btn btn-sm btn-outline-dark">Edit</a>
+                        <a href="/delete/<%= task.id %>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this task?')">Delete</a>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

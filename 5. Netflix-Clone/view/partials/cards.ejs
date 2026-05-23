@@ -1,0 +1,23 @@
+<section class="trending-section">
+  <div class="trending-shell">
+    <h2 class="section-title">Trending Now</h2>
+
+    <div class="trending-container">
+      <% console.log('movies in cards:', movies); %>
+      <% for (let i = 0; i < movies.length; i++) { %>
+        <% const movie = movies[i]; %>
+        <a href="/movies/view/<%= movie._id %>" class="movie-card-link">
+          <article class="movie-card">
+            <span class="rank-number"><%= i + 1 %></span>
+            <img 
+  src="<%= movie.image.includes('uploads') || movie.image.startsWith('/') 
+        ? movie.image 
+        : '/uploads/' + movie.image %>" 
+  class="poster"
+/>
+          </article>
+        </a>
+      <% } %>
+    </div>
+  </div>
+</section>
