@@ -3,7 +3,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-
+ 
 const connectDB = require('./config/db');
 const adminRoute = require('./routes/adminRoute');
 const cookieParser = require('cookie-parser');
