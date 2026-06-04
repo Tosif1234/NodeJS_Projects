@@ -38,6 +38,18 @@
   </div>
 <% } %>
 
+  <% if (success) { %>
+  <div class="alert alert-success alert-dismissible fade show text-center d-flex align-items-center justify-content-center py-3 mb-3" role="alert">
+    <small class="mb-0"><%= success %></small>
+    <button 
+      type="button" 
+      class="btn-close m-0 p-0 position-absolute top-50 end-0 translate-middle-y me-3" 
+      data-bs-dismiss="alert" 
+      aria-label="Close">
+    </button>
+  </div>
+<% } %>
+
           <h5 class="mb-1 text-center">Welcome to Materio! 👋🏻</h5>
           <p class="mb-7 text-center text-muted small">Please sign-in to your account and start the adventure</p>
 

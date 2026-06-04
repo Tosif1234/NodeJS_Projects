@@ -70,7 +70,6 @@
           console.log(error);
       }
   }
-
 module.exports.registerUser = async(req,res)=>{
   try {
     const {fullName, phoneNumber, email, password} = req.body;
@@ -85,7 +84,7 @@ module.exports.registerUser = async(req,res)=>{
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await admin.create({
+    await admin.create({
       fullName,
       phoneNumber,
       email,
@@ -96,16 +95,13 @@ module.exports.registerUser = async(req,res)=>{
       note: "Registered user"
     });
 
-    req.logIn(newUser, (error) => {
-      if(error){
-        console.log(error);
-        return res.redirect('/login');
-      }
-
-      res.redirect('/dashboard');
+    return res.render('pages/login', {
+      success: "Registration successful! Please login."
     });
+
   } catch (error) {
     console.log(error);
+
     res.render('pages/register',{
       error : "Something went wrong. Please try again."
     });

@@ -25,7 +25,6 @@
 
     <!-- Place this tag before closing body tag for github widget button. -->
     <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
@@ -34,22 +33,28 @@
     const error = "<%= flashMessages.error.length ? flashMessages.error[0] : '' %>";
 
     if (success) {
-        Swal.fire({
-            icon: "success",
-            title: "Success",
-            text: success,
-            timer: 2000,
-            showConfirmButton: false
-        });
-    }
+    Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: success,
+        timer: 2000,
+        showConfirmButton: false,
+        customClass: {
+            popup: 'my-swal-popup'
+        }
+    });
+}
 
-    if (error) {
-        Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: error
-        });
-    }
+if (error) {
+    Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error,
+        customClass: {
+            popup: 'my-swal-popup'
+        }
+    });
+}
 </script>
   </body>
 </html>

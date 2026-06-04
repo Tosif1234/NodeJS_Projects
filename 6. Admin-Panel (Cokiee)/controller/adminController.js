@@ -56,14 +56,13 @@ module.exports.registerUser = async(req,res)=>{
     const existingUser = await admin.findOne({email});
 
     if(existingUser){
-      return res.render('pages/register',{
-        error : "Email already exists !!"
-      });
+      req.flash('error', 'Email already exists.');
+      return res.redirect('/register');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await admin.create({
+    await admin.create({
       fullName,
       phoneNumber,
       email,
@@ -74,17 +73,17 @@ module.exports.registerUser = async(req,res)=>{
       note: "Registered user"
     });
 
-    res.cookie('userId', newUser._id, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000
-    });
+    req.flash(
+      'success',
+      'Registration successful! Please login to continue.'
+    );
 
-    res.redirect('/dashboard');
+    res.redirect('/login');
+
   } catch (error) {
     console.log(error);
-    res.render('pages/register',{
-      error : "Something went wrong. Please try again."
-    });
+    req.flash('error', 'Something went wrong. Please try again.');
+    res.redirect('/register');
   }
 }
 

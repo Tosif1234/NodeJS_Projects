@@ -23634,13 +23634,8 @@ body {
   color: var(--bs-heading-color);
 }
 .menu .menu-sub > .menu-item > .menu-link::before {
-  position: absolute;
-  border: 1.5px solid var(--bs-body-color);
-  block-size: 0.625rem;
-  content: "";
-  inline-size: 0.625rem;
-  inset-inline-start: 1.75rem;
-  border-radius: 50%;
+  content: none;
+  display: none;
 }
 .menu .ps.ps--active-y > .ps__rail-y {
   background: none;
@@ -25643,4 +25638,27 @@ body:not(.modal-open) .layout-content-navbar .layout-navbar {
 [data-bs-theme=dark] .footer,
 [data-bs-theme=dark] .footer .footer-link {
   color: #aba6c5;
+}
+
+.my-swal-popup{
+    width: 32em !important;
+    border-radius: 16px !important;
+    padding: 2rem !important;
+}
+
+.swal2-container{
+    z-index: 999999 !important;
+}
+
+.swal2-popup{
+    transform: none !important;
+    zoom: 1 !important;
+}
+
+.swal2-title{
+    font-size: 2rem !important;
+}
+
+.swal2-html-container{
+    font-size: 1rem !important;
 }

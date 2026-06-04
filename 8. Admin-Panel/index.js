@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
 
@@ -9,7 +10,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require("connect-flash");
 const passport = require('./config/passport');
-const Port = 8081;
+const Port = process.env.PORT || 8081;
 
 connectDB();
 
@@ -40,7 +41,7 @@ app.use((req, res, next) => {
         warning: req.flash('warning'),
         info: req.flash('info')
     };
-    next();
+    next();  
 });
 
 app.use('/', adminRoute);

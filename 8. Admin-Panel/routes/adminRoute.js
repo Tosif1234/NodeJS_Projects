@@ -34,6 +34,8 @@ route.get('/dashboard',isAuth, adminController.dashboardPage);
 route.get('/form-layout',isAuth, adminController.formLayoutPage);
 route.get('/profile',isAuth, adminController.profilePage);
 route.post('/profile',isAuth, upload.single('profileImage'), adminController.updateProfile);
+route.get('/change-password',isAuth, adminController.changePasswordPage);
+route.post('/change-password',isAuth, adminController.changePasswordSubmit);
 route.post('/users/add',isAuth, upload.single('profileImage'), adminController.addAdmin);
 route.get('/users',isAuth, adminController.userListPage);
 
@@ -48,6 +50,15 @@ route.get('/login',(req,res)=>{
 
     res.render('pages/login');
 })
+
+route.get('/forgot-password', adminController.forgotPasswordPage);
+route.post('/forgot-password', adminController.forgotPasswordSubmit);
+route.get('/verify-otp', adminController.verifyOtpPage);
+route.post('/verify-otp', adminController.verifyOtpSubmit);
+route.get('/resend-otp', adminController.resendOtp);
+route.get('/reset-password', adminController.resetPasswordPage);
+route.post('/reset-password', adminController.resetPasswordSubmit);
+
 route.post('/login', (req, res, next) => {
     passport.authenticate('local', (error, user, info) => {
         if(error){
