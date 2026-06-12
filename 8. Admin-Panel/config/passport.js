@@ -33,8 +33,12 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
+  console.log("DESERIALIZE CALLED");
+
   try {
     const user = await admin.findById(id);
+    console.log("DB ROLE:", user?.role);
+
     done(null, user);
   } catch (error) {
     done(error);

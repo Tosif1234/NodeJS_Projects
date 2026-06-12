@@ -11,6 +11,11 @@ const session = require('express-session');
 const flash = require("connect-flash");
 const passport = require('./config/passport');
 const Port = process.env.PORT || 8081;
+const categoryRoutes = require("./routes/categoryRoutes");
+const subcateRoutes = require("./routes/subcateRoute");
+const extraCateRoutes = require("./routes/extraCateRoutes");
+const productRoutes = require("./routes/productRoutes");
+const { attachRoleHelpers } = require("./middleware/roleMiddleware");
 
 connectDB();
 
@@ -44,7 +49,17 @@ app.use((req, res, next) => {
     next();  
 });
 
+app.use(attachRoleHelpers);
+
 app.use('/', adminRoute);
+
+app.use("/category", categoryRoutes);
+app.use("/subcategory", subcateRoutes);
+app.use("/extra-category", extraCateRoutes);
+app.use("/products", productRoutes);
+app.use((req, res) => {
+    res.status(404).render('pages/404');
+});
 
 app.listen(Port , (req,res)=>{
     console.log(`Server Running on http://localhost:${Port}`);

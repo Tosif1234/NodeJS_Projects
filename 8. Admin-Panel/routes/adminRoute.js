@@ -1,6 +1,7 @@
 const express = require('express');
 const adminController = require('../controller/adminController');
 const passport = require('../config/passport');
+const { requirePermission } = require('../middleware/roleMiddleware');
 
 const path = require('path');
 
@@ -29,19 +30,22 @@ const isAuth = (req,res,next)=>{
 
 const upload = multer({storage});
 
-route.get('/', isAuth,adminController.dashboardPage);
-route.get('/dashboard',isAuth, adminController.dashboardPage);
-route.get('/form-layout',isAuth, adminController.formLayoutPage);
-route.get('/profile',isAuth, adminController.profilePage);
-route.post('/profile',isAuth, upload.single('profileImage'), adminController.updateProfile);
-route.get('/change-password',isAuth, adminController.changePasswordPage);
-route.post('/change-password',isAuth, adminController.changePasswordSubmit);
-route.post('/users/add',isAuth, upload.single('profileImage'), adminController.addAdmin);
-route.get('/users',isAuth, adminController.userListPage);
+route.get('/', isAuth, requirePermission('dashboard:view'), adminController.dashboardPage);
+route.get('/dashboard', isAuth, requirePermission('dashboard:view'), adminController.dashboardPage);
+route.get('/form-layout', isAuth, requirePermission('users:manage'), adminController.formLayoutPage);
+route.get('/profile', isAuth, requirePermission('profile:manage'), adminController.profilePage);
+route.post('/profile', isAuth, requirePermission('profile:manage'), upload.single('profileImage'), adminController.updateProfile);
+route.get('/change-password', isAuth, requirePermission('profile:manage'), adminController.changePasswordPage);
+route.post('/change-password', isAuth, requirePermission('profile:manage'), adminController.changePasswordSubmit);
+route.post('/users/add', isAuth, requirePermission('users:manage'), upload.single('profileImage'), adminController.addAdmin);
+route.get('/users', isAuth, requirePermission('users:manage'), adminController.userListPage);
+route.get('/users/trash', isAuth, requirePermission('users:manage'), adminController.trashUsersPage);
 
-route.get('/users/edit/:id',isAuth,adminController.editPage);
-route.post('/users/update/:id',isAuth, upload.single('profileImage'), adminController.updateUser);
-route.post('/users/delete/:id',isAuth, adminController.deleteUser);
+route.get('/users/edit/:id', isAuth, requirePermission('users:manage'), adminController.editPage);
+route.post('/users/update/:id', isAuth, requirePermission('users:manage'), upload.single('profileImage'), adminController.updateUser);
+route.post('/users/delete/:id', isAuth, requirePermission('users:manage'), adminController.deleteUser);
+route.post('/users/restore/:id', isAuth, requirePermission('users:manage'), adminController.restoreUser);
+route.post('/users/permanent-delete/:id', isAuth, requirePermission('users:manage'), adminController.permanentDeleteUser);
 
 route.get('/login',(req,res)=>{
     if(req.isAuthenticated()){

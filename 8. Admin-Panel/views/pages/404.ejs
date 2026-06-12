@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Colors pulled directly from your screenshot */
+            --primary: #8c57ff;
+            --primary-hover: #7b4be0;
+            --bg-color: #f4f5fa;
+            --card-bg: #ffffff;
+            --text-main: #3a3541de;
+            --text-muted: #3a354199;
+            --shadow: 0px 4px 18px 0px rgba(47, 43, 61, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: var(--text-main);
+            position: relative;
+        }
+
+        /* Mocking the top-left logo to make it feel like part of the app */
+        .logo-container {
+            position: absolute;
+            top: 24px;
+            left: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
+            color: var(--text-main);
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        /* The main error card matching the dashboard widgets */
+        .error-card {
+            background: var(--card-bg);
+            padding: 3.5rem 2.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+        }
+
+        .emoji {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-code {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+        }
+
+        .error-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .error-message {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+        }
+
+        /* Button matching the "View Sales" and "Details" buttons */
+        .btn-dashboard {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 8px -4px var(--primary);
+        }
+
+        .btn-dashboard:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px -4px var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="error-card">
+        <div class="emoji">🕵️‍♂️</div>
+        <div class="error-code">404</div>
+        <div class="error-title">Page Not Found 🚨</div>
+        <div class="error-message">Oops! The data or page you are looking for has vanished or doesn't exist in this admin panel.</div>
+        <a href="/" class="btn-dashboard">Back to Dashboard</a>
+    </div>
+
+</body>
+</html>

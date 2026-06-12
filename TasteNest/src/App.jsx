@@ -17,11 +17,11 @@ function App() {
   return (
     <div className="font-oswald bg-[#fcfbfa] text-neutral-900 antialiased selection:bg-red-500 selection:text-white">
       <Navbar />
-      <Hero />
-      <PromoCards />
+      {/* <Hero /> */}
+      {/* <PromoCards /> */}
       <BannerPizza />
-      <Categories />
-      <DeliveryChallenge />
+      {/* <Categories /> */}
+      {/* <DeliveryChallenge /> */}
       <MenuGrid />
       <TrendingMenu />
       <AboutUs />

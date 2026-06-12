@@ -1,4 +1,15 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu">
+  <%
+    var checkPermission = typeof canPermission === 'function' ? canPermission : function () { return false; };
+    var canUsers = checkPermission('users:manage');
+    var canCategories = checkPermission('categories:manage');
+    var canSubcategories = checkPermission('subcategories:manage');
+    var canExtraCategories = checkPermission('extraCategories:manage');
+    var canProductView = checkPermission('products:view');
+    var canProductCreate = checkPermission('products:create');
+    var canProductTrash = checkPermission('products:trash');
+    var showStoreMenu = canUsers || canCategories || canSubcategories || canExtraCategories || canProductView;
+  %>
   
   <div class="app-brand demo ">
     <a href="/" class="app-brand-link gap-xl-0 gap-2">
@@ -41,11 +52,14 @@
       </a>
     </li>
     
-    <li class="menu-header small text-uppercase">
-      <span class="menu-header-text" data-i18n="Store Management">Store Management</span>
-    </li>
+    <% if (showStoreMenu) { %>
+      <li class="menu-header small text-uppercase">
+        <span class="menu-header-text" data-i18n="Store Management">Store Management</span>
+      </li>
+    <% } %>
 
-    <li class="menu-item <%= ['add-user', 'view-users', 'trash-users'].includes(activePage) ? 'active open' : '' %>">
+    <% if (canUsers) { %>
+      <li class="menu-item <%= ['add-user', 'view-users', 'trash-users'].includes(activePage) ? 'active open' : '' %>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon icon-base ri ri-group-line"></i>
         <div data-i18n="User Management">User Management</div>
@@ -71,8 +85,10 @@
         </li>
       </ul>
     </li>
+    <% } %>
 
-    <li class="menu-item <%= ['add-category', 'view-category', 'trash-category'].includes(activePage) ? 'active open' : '' %>">
+    <% if (canCategories) { %>
+      <li class="menu-item <%= ['add-category', 'view-category', 'trash-category'].includes(activePage) ? 'active open' : '' %>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon icon-base ri ri-folder-2-line"></i>
         <div data-i18n="Categories">Categories</div>
@@ -98,8 +114,10 @@
         </li>
       </ul>
     </li>
+    <% } %>
 
-    <li class="menu-item <%= ['add-subcategory', 'view-subcategory', 'trash-subcategory'].includes(activePage) ? 'active open' : '' %>">
+    <% if (canSubcategories) { %>
+      <li class="menu-item <%= ['add-subcategory', 'view-subcategory', 'trash-subcategory'].includes(activePage) ? 'active open' : '' %>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon icon-base ri ri-node-tree"></i>
         <div data-i18n="Subcategories">Subcategories</div>
@@ -125,8 +143,10 @@
         </li>
       </ul>
     </li>
+    <% } %>
 
-    <li class="menu-item <%= ['add-extra-category', 'view-extra-category', 'trash-extra-category'].includes(activePage) ? 'active open' : '' %>">
+    <% if (canExtraCategories) { %>
+      <li class="menu-item <%= ['add-extra-category', 'view-extra-category', 'trash-extra-category'].includes(activePage) ? 'active open' : '' %>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon icon-base ri ri-price-tag-3-line"></i>
         <div data-i18n="Extra Categories">Extra Categories</div>
@@ -152,33 +172,40 @@
         </li>
       </ul>
     </li>
+    <% } %>
 
-    <li class="menu-item <%= ['add-product', 'view-products', 'trash-products'].includes(activePage) ? 'active open' : '' %>">
+    <% if (canProductView) { %>
+      <li class="menu-item <%= ['add-product', 'view-products', 'trash-products'].includes(activePage) ? 'active open' : '' %>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon icon-base ri ri-shopping-bag-3-line"></i>
         <div data-i18n="Product Inventory">Product Inventory</div>
       </a>
       <ul class="menu-sub">
-        <li class="menu-item <%= activePage === 'add-product' ? 'active' : '' %>">
-          <a href="/products/add" class="menu-link">
-            <i class="menu-icon ri ri-add-box-line"></i>
-            <div data-i18n="Add New Product">Add New Product</div>
-          </a>
-        </li>
+        <% if (canProductCreate) { %>
+          <li class="menu-item <%= activePage === 'add-product' ? 'active' : '' %>">
+            <a href="/products/add" class="menu-link">
+              <i class="menu-icon ri ri-add-box-line"></i>
+              <div data-i18n="Add New Product">Add New Product</div>
+            </a>
+          </li>
+        <% } %>
         <li class="menu-item <%= activePage === 'view-products' ? 'active' : '' %>">
           <a href="/products/view" class="menu-link">
             <i class="menu-icon ri ri-list-check-2"></i>
             <div data-i18n="All Products">All Products</div>
           </a>
         </li>
-        <li class="menu-item <%= activePage === 'trash-products' ? 'active' : '' %>">
-          <a href="/products/trash" class="menu-link">
-            <i class="menu-icon ri ri-archive-line"></i>
-            <div data-i18n="Archived Products">Archived Products</div>
-          </a>
-        </li>
+        <% if (canProductTrash) { %>
+          <li class="menu-item <%= activePage === 'trash-products' ? 'active' : '' %>">
+            <a href="/products/trash" class="menu-link">
+              <i class="menu-icon ri ri-archive-line"></i>
+              <div data-i18n="Archived Products">Archived Products</div>
+            </a>
+          </li>
+        <% } %>
       </ul>
     </li>
+    <% } %>
 
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text" data-i18n="Preferences">Preferences</span>

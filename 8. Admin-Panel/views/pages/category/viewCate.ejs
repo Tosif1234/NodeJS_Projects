@@ -1,0 +1,141 @@
+<%- include('../../partials/header') %>
+
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <%- include('../../partials/sidebar') %>
+
+    <div class="layout-page">
+      <%- include('../../partials/navbar') %>
+
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+              <h4 class="fw-bold mb-1">
+                <span class="text-muted fw-light">Categories /</span> Manage Categories
+              </h4>
+              <p class="mb-0 text-muted">Review active catalog groups and manage their availability.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+              <a href="/category/trash" class="btn btn-outline-secondary">
+                <i class="ri ri-archive-line me-1"></i>
+                Archive
+              </a>
+              <a href="/category/add" class="btn btn-primary">
+                <i class="ri ri-add-line me-1"></i>
+                Add Category
+              </a>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header border-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="avatar">
+                  <div class="avatar-initial bg-label-primary rounded">
+                    <i class="ri ri-folder-2-line icon-24px"></i>
+                  </div>
+                </div>
+                <div>
+                  <h5 class="mb-0">Category List</h5>
+                  <small class="text-muted">Showing <%= categories ? categories.length : 0 %> active records</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body p-0">
+              <div class="table-responsive text-nowrap">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Category</th>
+                      <th>Status</th>
+                      <th>Created</th>
+                      <th class="text-end">Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody class="table-border-bottom-0">
+                    <% if (categories && categories.length > 0) { %>
+                      <% categories.forEach((item, index) => { %>
+                        <tr>
+                          <td class="text-muted"><%= index + 1 %></td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="avatar avatar-sm me-3">
+                                <div class="avatar-initial bg-label-secondary rounded">
+                                  <i class="ri ri-folder-line"></i>
+                                </div>
+                              </div>
+                              <span class="fw-medium text-heading"><%= item.category %></span>
+                            </div>
+                          </td>
+                          <td>
+                            <% if (item.isActive) { %>
+                              <span class="badge bg-label-success">Active</span>
+                            <% } else { %>
+                              <span class="badge bg-label-danger">Inactive</span>
+                            <% } %>
+                          </td>
+                          <td><%= item.createdAt ? item.createdAt.toDateString() : '-' %></td>
+                          <td class="text-end">
+                            <div class="dropdown">
+                              <button class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown" type="button">
+                                <i class="icon-base ri ri-more-2-line icon-md"></i>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <a class="dropdown-item" href="/category/edit/<%= item._id %>">
+                                    <i class="ri ri-edit-line me-2"></i>
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item text-danger"
+                                    href="/category/delete/<%= item._id %>"
+                                    onclick="confirmAction(event, this.href, 'archive', 'category')">
+                                    <i class="ri ri-delete-bin-7-line me-2"></i>
+                                    Archive
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      <% }) %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="5" class="text-center py-5">
+                          <div class="avatar avatar-xl mx-auto mb-3">
+                            <div class="avatar-initial bg-label-secondary rounded-circle">
+                              <i class="ri ri-folder-open-line icon-28px"></i>
+                            </div>
+                          </div>
+                          <h6 class="mb-1">No Categories Found</h6>
+                          <p class="text-muted mb-3">Create your first category to organize products.</p>
+                          <a href="/category/add" class="btn btn-primary">
+                            <i class="ri ri-add-line me-1"></i>
+                            Add Category
+                          </a>
+                        </td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%- include('../../partials/footer') %>
+        <div class="content-backdrop fade"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+
+<%- include('../../partials/scripts') %>

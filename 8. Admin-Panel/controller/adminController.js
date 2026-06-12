@@ -5,8 +5,10 @@
   const nodemailer = require('nodemailer');
 
   const admin = require('../model/adminSchema');
+  const { normalizeRole, ROLE_NAMES } = require('../middleware/roleMiddleware');
   const uploadDir = path.join(__dirname, '..', 'public', 'uploads');
   const OTP_EXPIRES_IN_MS = 2 * 60 * 1000;
+  const allowedRoles = Object.values(ROLE_NAMES);
 
   const createOtp = () => crypto.randomInt(100000, 999999).toString();
 
@@ -70,7 +72,7 @@
   };
 
   module.exports.formLayoutPage = (req, res) => {
-    res.render('pages/form-layout', { activePage: 'form-layout' });
+    res.render('pages/form-layout', { activePage: 'add-user' });
   };
 
   module.exports.profilePage = (req, res) => {
@@ -236,11 +238,11 @@
 
  module.exports.userListPage = async (req, res) => {
   try {
-    const users = await admin.find();
+    const users = await admin.find({ isDeleted: { $ne: true } }).sort({ createdAt: -1 });
 
     res.render('pages/userList', {
       users, 
-      activePage: 'users'
+      activePage: 'view-users'
     });
 
   } catch (error) {
@@ -248,15 +250,36 @@
   }
 };
 
+module.exports.trashUsersPage = async (req, res) => {
+  try {
+    const users = await admin.find({ isDeleted: true }).sort({ updatedAt: -1 });
+
+    res.render('pages/trashUsers', {
+      users,
+      activePage: 'trash-users'
+    });
+  } catch (error) {
+    console.log(error);
+    req.flash('error', 'Unable to load deleted users.');
+    res.redirect('/users');
+  }
+};
+
   module.exports.addAdmin = async(req,res) =>{
       try {
           const {fullName,phoneNumber,email,password,role,plan,status,note} = req.body;
+          const normalizedRole = normalizeRole(role);
+
+          if (!allowedRoles.includes(normalizedRole)) {
+            req.flash('error', 'Please select a valid role.');
+            return res.redirect('/form-layout');
+          }
 
           const image = req.file ? req.file.filename : null;
 
           const hashedPassword = await bcrypt.hash(password, 10);
 
-          const newAdmin = new admin({fullName,phoneNumber,email,password: hashedPassword,role,plan,status,note, Image : image});
+          const newAdmin = new admin({fullName,phoneNumber,email,password: hashedPassword,role: normalizedRole,plan,status,note, Image : image});
 
           await newAdmin.save();
 
@@ -309,7 +332,10 @@ module.exports.registerUser = async(req,res)=>{
 
 module.exports.editPage = async (req, res) => {
   try {
-    const user = await admin.findById(req.params.id);
+    const user = await admin.findOne({
+      _id: req.params.id,
+      isDeleted: { $ne: true }
+    });
 
     if (!user) {
       req.flash('error', 'User not found.');
@@ -318,7 +344,7 @@ module.exports.editPage = async (req, res) => {
 
     res.render('pages/editUser', {
       user,
-      activePage: 'users'
+      activePage: 'view-users'
     });
 
   } catch (error) {
@@ -331,13 +357,28 @@ module.exports.editPage = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
   try {
     const { fullName, phoneNumber, email, role, plan, status, note } = req.body;
-    const existingUser = await admin.findById(req.params.id);
+    const normalizedRole = normalizeRole(role);
+
+    if (!allowedRoles.includes(normalizedRole)) {
+      req.flash('error', 'Please select a valid role.');
+      return res.redirect('/users');
+    }
+
+    const existingUser = await admin.findOne({
+      _id: req.params.id,
+      isDeleted: { $ne: true }
+    });
+
+    if (!existingUser) {
+      req.flash('error', 'User not found.');
+      return res.redirect('/users');
+    }
 
     let updateData = {
       fullName,
       phoneNumber,
       email,
-      role,
+      role: normalizedRole,
       plan,
       status,
       note
@@ -442,22 +483,87 @@ module.exports.changePasswordSubmit = async (req, res) => {
 
 module.exports.deleteUser = async (req, res) => {
   try {
-    const deletedUser = await admin.findByIdAndDelete(req.params.id);
+    if (req.user && req.user._id.toString() === req.params.id) {
+      req.flash('error', 'You cannot archive your own account while logged in.');
+      return res.redirect('/users');
+    }
+
+    const deletedUser = await admin.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        isDeleted: { $ne: true }
+      },
+      {
+        isDeleted: true
+      }
+    );
 
     if (!deletedUser) {
-      req.flash('error', 'User not found or already deleted.');
+      req.flash('error', 'User not found or already archived.');
       return res.redirect('/users');
+    }
+
+    req.flash('success', 'User moved to deleted users.');
+    res.redirect('/users');
+  } catch (error) {
+    console.log(error);
+    req.flash('error', 'Unable to archive user. Please try again.');
+    res.redirect('/users');
+  }
+};
+
+module.exports.restoreUser = async (req, res) => {
+  try {
+    const restoredUser = await admin.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        isDeleted: true
+      },
+      {
+        isDeleted: false
+      }
+    );
+
+    if (!restoredUser) {
+      req.flash('error', 'Deleted user not found.');
+      return res.redirect('/users/trash');
+    }
+
+    req.flash('success', 'User restored successfully.');
+    res.redirect('/users/trash');
+  } catch (error) {
+    console.log(error);
+    req.flash('error', 'Unable to restore user. Please try again.');
+    res.redirect('/users/trash');
+  }
+};
+
+module.exports.permanentDeleteUser = async (req, res) => {
+  try {
+    if (req.user && req.user._id.toString() === req.params.id) {
+      req.flash('error', 'You cannot permanently delete your own account while logged in.');
+      return res.redirect('/users/trash');
+    }
+
+    const deletedUser = await admin.findOneAndDelete({
+      _id: req.params.id,
+      isDeleted: true
+    });
+
+    if (!deletedUser) {
+      req.flash('error', 'Deleted user not found.');
+      return res.redirect('/users/trash');
     }
 
     if (deletedUser.Image) {
       await deleteUploadedImage(deletedUser.Image);
     }
 
-    req.flash('success', 'User deleted successfully.');
-    res.redirect('/users');
+    req.flash('success', 'User permanently deleted.');
+    res.redirect('/users/trash');
   } catch (error) {
     console.log(error);
-    req.flash('error', 'Unable to delete user. Please try again.');
-    res.redirect('/users');
+    req.flash('error', 'Unable to permanently delete user. Please try again.');
+    res.redirect('/users/trash');
   }
 };

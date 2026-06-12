@@ -28,33 +28,185 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    const success = "<%= flashMessages.success.length ? flashMessages.success[0] : '' %>";
+    const flashMessages = <%- JSON.stringify(flashMessages || {}) %>;
 
-    const error = "<%= flashMessages.error.length ? flashMessages.error[0] : '' %>";
+    const alertConfig = [
+        { key: 'success', icon: 'success', title: 'Success', timer: 2000 },
+        { key: 'error', icon: 'error', title: 'Error' },
+        { key: 'warning', icon: 'warning', title: 'Warning' },
+        { key: 'info', icon: 'info', title: 'Info' }
+    ];
 
-    if (success) {
-    Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: success,
-        timer: 2000,
-        showConfirmButton: false,
-        customClass: {
-            popup: 'my-swal-popup'
-        }
+    const activeAlert = alertConfig.find(function (item) {
+        return flashMessages[item.key] && flashMessages[item.key].length;
     });
-}
 
-if (error) {
-    Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error,
-        customClass: {
-            popup: 'my-swal-popup'
+    if (activeAlert) {
+        Swal.fire({
+            icon: activeAlert.icon,
+            title: activeAlert.title,
+            text: flashMessages[activeAlert.key][0],
+            timer: activeAlert.timer,
+            showConfirmButton: !activeAlert.timer,
+            customClass: {
+                popup: 'my-swal-popup'
+            }
+        });
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const categorySelect = document.querySelector(".js-category-select");
+        const subcategorySelect = document.querySelector(".js-subcategory-select");
+        const extraSelect = document.querySelector(".js-extra-select");
+
+        if (!categorySelect || !subcategorySelect || !extraSelect) {
+            return;
         }
+
+        const subcategoryOptions = Array.from(subcategorySelect.options);
+        const extraOptions = Array.from(extraSelect.options);
+
+        const syncSubcategories = function () {
+            const categoryId = categorySelect.value;
+            const selectedSubcategory = subcategorySelect.value;
+
+            subcategoryOptions.forEach(function (option) {
+                if (!option.value) {
+                    option.hidden = false;
+                    return;
+                }
+
+                option.hidden = option.dataset.category !== categoryId;
+            });
+
+            subcategorySelect.disabled = !categoryId;
+
+            if (!categoryId || (subcategorySelect.selectedOptions[0] && subcategorySelect.selectedOptions[0].hidden)) {
+                subcategorySelect.value = "";
+            } else {
+                subcategorySelect.value = selectedSubcategory;
+            }
+        };
+
+        const syncExtras = function () {
+            const categoryId = categorySelect.value;
+            const subcategoryId = subcategorySelect.value;
+            const selectedExtra = extraSelect.value;
+
+            extraOptions.forEach(function (option) {
+                if (!option.value) {
+                    option.hidden = false;
+                    return;
+                }
+
+                option.hidden = option.dataset.category !== categoryId || option.dataset.subcategory !== subcategoryId;
+            });
+
+            extraSelect.disabled = !categoryId || !subcategoryId;
+
+            if (!categoryId || !subcategoryId || (extraSelect.selectedOptions[0] && extraSelect.selectedOptions[0].hidden)) {
+                extraSelect.value = "";
+            } else {
+                extraSelect.value = selectedExtra;
+            }
+        };
+
+        categorySelect.addEventListener("change", function () {
+            syncSubcategories();
+            syncExtras();
+        });
+
+        subcategorySelect.addEventListener("change", syncExtras);
+
+        syncSubcategories();
+        syncExtras();
     });
-}
+    const confirmationMessages = {
+        archive: {
+            icon: 'warning',
+            title: 'Are you sure?',
+            text: function (itemName) {
+                return 'This ' + itemName + ' will be moved to the archive.';
+            },
+            confirmButtonText: 'Yes, archive it',
+            confirmButtonColor: '#696cff'
+        },
+        trash: {
+            icon: 'warning',
+            title: 'Delete this user?',
+            text: function () {
+                return 'This user will be moved to Deleted Users.';
+            },
+            confirmButtonText: 'Yes, delete it',
+            confirmButtonColor: '#ff3e1d'
+        },
+        restore: {
+            icon: 'question',
+            title: 'Restore this item?',
+            text: function (itemName) {
+                return 'This ' + itemName + ' will be restored to the active list.';
+            },
+            confirmButtonText: 'Yes, restore it',
+            confirmButtonColor: '#696cff'
+        },
+        delete: {
+            icon: 'warning',
+            title: 'Delete permanently?',
+            text: function (itemName) {
+                return 'This ' + itemName + ' will be permanently deleted. This action cannot be undone.';
+            },
+            confirmButtonText: 'Yes, delete it',
+            confirmButtonColor: '#ff3e1d'
+        }
+    };
+
+    function showConfirmation(action, itemName) {
+        const config = confirmationMessages[action] || confirmationMessages.archive;
+        const displayName = itemName || 'record';
+
+        return Swal.fire({
+            title: config.title,
+            text: config.text(displayName),
+            icon: config.icon,
+            showCancelButton: true,
+            confirmButtonColor: config.confirmButtonColor,
+            cancelButtonColor: '#8592a3',
+            confirmButtonText: config.confirmButtonText,
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+            focusCancel: true,
+            customClass: {
+                popup: 'my-swal-popup',
+                confirmButton: 'my-swal-confirm',
+                cancelButton: 'my-swal-cancel'
+            }
+        });
+    }
+
+    function confirmAction(event, url, action, itemName) {
+        event.preventDefault();
+
+        showConfirmation(action, itemName).then(function (result) {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+
+    function confirmForm(event, form, action, itemName) {
+        event.preventDefault();
+
+        showConfirmation(action, itemName).then(function (result) {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    }
+
+    function confirmArchive(event, url) {
+        confirmAction(event, url, 'archive', 'subcategory');
+    }
 </script>
   </body>
 </html>

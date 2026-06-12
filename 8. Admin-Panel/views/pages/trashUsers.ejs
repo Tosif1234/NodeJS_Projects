@@ -1,0 +1,128 @@
+<%- include('../partials/header') %>
+
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <%- include('../partials/sidebar') %>
+
+    <div class="layout-page">
+      <%- include('../partials/navbar') %>
+
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+              <h4 class="fw-bold mb-1">
+                <span class="text-muted fw-light">User Management /</span> Deleted Users
+              </h4>
+              <p class="mb-0 text-muted">Restore archived users or permanently remove accounts.</p>
+            </div>
+            <a href="/users" class="btn btn-primary">
+              <i class="ri ri-arrow-left-line me-1"></i>
+              Back to Users
+            </a>
+          </div>
+
+          <div class="card">
+            <div class="card-header border-bottom d-flex align-items-center gap-3">
+              <div class="avatar">
+                <div class="avatar-initial bg-label-warning rounded">
+                  <i class="ri ri-archive-line icon-24px"></i>
+                </div>
+              </div>
+              <div>
+                <h5 class="mb-0">Deleted Users</h5>
+                <small class="text-muted">Showing <%= users ? users.length : 0 %> deleted records</small>
+              </div>
+            </div>
+
+            <div class="card-body p-0">
+              <div class="table-responsive text-nowrap">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Plan</th>
+                      <th>Status</th>
+                      <th class="text-end">Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody class="table-border-bottom-0">
+                    <% if (users && users.length > 0) { %>
+                      <% users.forEach(user => { %>
+                        <tr>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <img
+                                src="<%= user.Image ? '/uploads/' + user.Image : '/assets/img/avatars/1.png' %>"
+                                alt="<%= user.fullName %>"
+                                class="rounded-circle me-3"
+                                style="width: 40px; height: 40px; object-fit: cover;" />
+                              <div>
+                                <span class="fw-medium text-heading d-block"><%= user.fullName %></span>
+                                <small class="text-muted">@<%= user.email ? user.email.split('@')[0] : 'user' %></small>
+                              </div>
+                            </div>
+                          </td>
+                          <td><%= user.email %></td>
+                          <td><%= user.role %></td>
+                          <td><%= user.plan %></td>
+                          <td>
+                            <span class="badge bg-label-warning">Deleted</span>
+                          </td>
+                          <td class="text-end">
+                            <div class="d-flex justify-content-end gap-2">
+                              <form
+                                action="/users/restore/<%= user._id %>"
+                                method="POST"
+                                onsubmit="confirmForm(event, this, 'restore', 'user')">
+                                <button type="submit" class="btn btn-sm btn-outline-success">
+                                  <i class="ri ri-arrow-go-back-line me-1"></i>
+                                  Restore
+                                </button>
+                              </form>
+                              <form
+                                action="/users/permanent-delete/<%= user._id %>"
+                                method="POST"
+                                onsubmit="confirmForm(event, this, 'delete', 'user')">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                  <i class="ri ri-delete-bin-7-line me-1"></i>
+                                  Delete
+                                </button>
+                              </form>
+                            </div>
+                          </td>
+                        </tr>
+                      <% }) %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="6" class="text-center py-5">
+                          <div class="avatar avatar-xl mx-auto mb-3">
+                            <div class="avatar-initial bg-label-secondary rounded-circle">
+                              <i class="ri ri-archive-2-line icon-28px"></i>
+                            </div>
+                          </div>
+                          <h6 class="mb-1">Deleted Users is Empty</h6>
+                          <p class="text-muted mb-0">Users moved from the active list will appear here.</p>
+                        </td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%- include('../partials/footer') %>
+        <div class="content-backdrop fade"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+
+<%- include('../partials/scripts') %>

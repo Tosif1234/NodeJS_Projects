@@ -1,0 +1,143 @@
+<%- include('../../partials/header') %>
+
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <%- include('../../partials/sidebar') %>
+
+    <div class="layout-page">
+      <%- include('../../partials/navbar') %>
+
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+              <h4 class="fw-bold mb-1">
+                <span class="text-muted fw-light">Subcategories /</span> Manage Subcategories
+              </h4>
+              <p class="mb-0 text-muted">Review active subcategories and their parent categories.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+              <a href="/subcategory/trash" class="btn btn-outline-secondary">
+                <i class="ri ri-archive-line me-1"></i>
+                Archive
+              </a>
+              <a href="/subcategory/add" class="btn btn-primary">
+                <i class="ri ri-add-line me-1"></i>
+                Add Subcategory
+              </a>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header border-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="avatar">
+                  <div class="avatar-initial bg-label-primary rounded">
+                    <i class="ri ri-node-tree icon-24px"></i>
+                  </div>
+                </div>
+                <div>
+                  <h5 class="mb-0">Subcategory List</h5>
+                  <small class="text-muted">Showing <%= subcategories ? subcategories.length : 0 %> active records</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body p-0">
+              <div class="table-responsive text-nowrap">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Subcategory</th>
+                      <th>Parent Category</th>
+                      <th>Status</th>
+                      <th>Created</th>
+                      <th class="text-end">Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody class="table-border-bottom-0">
+                    <% if (subcategories && subcategories.length > 0) { %>
+                      <% subcategories.forEach((item, index) => { %>
+                        <tr>
+                          <td class="text-muted"><%= index + 1 %></td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="avatar avatar-sm me-3">
+                                <div class="avatar-initial bg-label-secondary rounded">
+                                  <i class="ri ri-node-tree"></i>
+                                </div>
+                              </div>
+                              <span class="fw-medium text-heading"><%= item.subcategory %></span>
+                            </div>
+                          </td>
+                          <td><%= item.category ? item.category.category : '-' %></td>
+                          <td>
+                            <% if (item.isActive) { %>
+                              <span class="badge bg-label-success">Active</span>
+                            <% } else { %>
+                              <span class="badge bg-label-danger">Inactive</span>
+                            <% } %>
+                          </td>
+                          <td><%= item.createdAt ? item.createdAt.toDateString() : '-' %></td>
+                          <td class="text-end">
+                            <div class="dropdown">
+                              <button class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown" type="button">
+                                <i class="icon-base ri ri-more-2-line icon-md"></i>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <a class="dropdown-item" href="/subcategory/edit/<%= item._id %>">
+                                    <i class="ri ri-edit-line me-2"></i>
+                                    Edit
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item text-danger"
+                                    href="/subcategory/delete/<%= item._id %>"
+                                    onclick="confirmAction(event, this.href, 'archive', 'subcategory')">
+                                    <i class="ri ri-delete-bin-7-line me-2"></i>
+                                    Archive
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      <% }) %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="6" class="text-center py-5">
+                          <div class="avatar avatar-xl mx-auto mb-3">
+                            <div class="avatar-initial bg-label-secondary rounded-circle">
+                              <i class="ri ri-node-tree icon-28px"></i>
+                            </div>
+                          </div>
+                          <h6 class="mb-1">No Subcategories Found</h6>
+                          <p class="text-muted mb-3">Create a subcategory to organize products inside categories.</p>
+                          <a href="/subcategory/add" class="btn btn-primary">
+                            <i class="ri ri-add-line me-1"></i>
+                            Add Subcategory
+                          </a>
+                        </td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%- include('../../partials/footer') %>
+        <div class="content-backdrop fade"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+
+<%- include('../../partials/scripts') %>

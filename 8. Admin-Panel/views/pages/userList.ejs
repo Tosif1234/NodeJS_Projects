@@ -124,10 +124,10 @@
       <div class="form-floating form-floating-outline">
         <select class="form-select" id="filterRole">
           <option value="">Select Role</option>
+          <option>Super Admin</option>
           <option>Admin</option>
+          <option>Manager</option>
           <option>User</option>
-          <option>Editor</option>
-          <option>Author</option>
         </select>
         <label>Select Role</label>
       </div>
@@ -185,6 +185,10 @@
         Add New User
       </a>
 
+      <a href="/users/trash" class="btn btn-outline-secondary">
+        <i class="ri ri-archive-line me-1"></i> Deleted Users
+      </a>
+
     </div>
 
   </div>
@@ -209,6 +213,8 @@
     <% users.map((user,index)=>{
       const roleIcons = {
         Admin: { icon: 'ri-computer-line', className: 'role-admin' },
+        'Super Admin': { icon: 'ri-vip-crown-line', className: 'role-author' },
+        Manager: { icon: 'ri-briefcase-4-line', className: 'role-maintainer' },
         User: { icon: 'ri-user-line', className: 'role-subscriber' },
         Subscriber: { icon: 'ri-user-line', className: 'role-subscriber' },
         Editor: { icon: 'ri-edit-box-line', className: 'role-editor' },
@@ -223,7 +229,7 @@
       <td>
         <div class="user-profile-cell">
           <img
-            src="/uploads/<%= user.Image %>"
+            src="<%= user.Image ? '/uploads/' + user.Image : '/assets/img/avatars/1.png' %>"
             alt="<%= user.fullName %>"
             class="user-list-avatar rounded-circle" />
           <div>
@@ -252,12 +258,6 @@
     </button>
 
     <ul class="dropdown-menu dropdown-menu-end">
-      
-      <li>
-        <a class="dropdown-item" href="#">
-          <i class="ri ri-eye-line me-2"></i> View
-        </a>
-      </li>
 
       <li>
         <a class="dropdown-item" href="/users/edit/<%= user._id %>">
@@ -266,9 +266,14 @@
       </li>
 
       <li>
-        <form action="/users/delete/<%= user._id %>" method="POST" class="js-delete-user-form" data-user-name="<%= user.fullName %>">
+        <form
+          action="/users/delete/<%= user._id %>"
+          method="POST"
+          class="js-delete-user-form"
+          data-user-name="<%= user.fullName %>"
+          onsubmit="confirmForm(event, this, 'trash', 'user')">
   <button type="submit" class="dropdown-item text-danger">
-    <i class="ri ri-delete-bin-7-line me-2"></i> Delete
+    <i class="ri ri-archive-line me-2"></i> Delete
   </button>
 </form>
       </li>

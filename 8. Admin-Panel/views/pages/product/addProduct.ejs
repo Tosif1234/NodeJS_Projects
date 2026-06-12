@@ -1,0 +1,235 @@
+<%- include('../../partials/header') %>
+
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <%- include('../../partials/sidebar') %>
+
+    <div class="layout-page">
+      <%- include('../../partials/navbar') %>
+
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+              <h4 class="fw-bold mb-1">
+                <span class="text-muted fw-light">Products /</span> Add Product
+              </h4>
+              <p class="mb-0 text-muted">Select the complete category path, upload an image, and add product pricing.</p>
+            </div>
+            <a href="/products/view" class="btn btn-outline-secondary">
+              <i class="ri ri-arrow-left-line me-1"></i>
+              Back to List
+            </a>
+          </div>
+
+          <div class="row g-6">
+            <div class="col-xl-8 col-lg-9">
+              <div class="card">
+                <div class="card-header border-bottom">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="avatar">
+                      <div class="avatar-initial bg-label-primary rounded">
+                        <i class="ri ri-shopping-bag-3-line icon-24px"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <h5 class="mb-0">Product Details</h5>
+                      <small class="text-muted">Choose category, subcategory, extra category, then add image and price.</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-body pt-5">
+                  <form action="/products/add" method="POST" enctype="multipart/form-data">
+                    <div class="row g-5">
+                      <div class="col-md-4">
+                        <div class="form-floating form-floating-outline">
+                          <select class="form-select js-category-select" id="categoryId" name="category" required>
+                            <option value="">Select Category</option>
+                            <% categories.forEach((item) => { %>
+                              <option value="<%= item._id %>"><%= item.category %></option>
+                            <% }) %>
+                          </select>
+                          <label for="categoryId">Category <span class="text-danger">*</span></label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-floating form-floating-outline">
+                          <select class="form-select js-subcategory-select" id="subcategoryId" name="subcategory" required disabled>
+                            <option value="">Select Subcategory</option>
+                            <% subcategories.forEach((item) => { %>
+                              <option value="<%= item._id %>" data-category="<%= item.category ? item.category._id : '' %>"><%= item.subcategory %></option>
+                            <% }) %>
+                          </select>
+                          <label for="subcategoryId">Subcategory <span class="text-danger">*</span></label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-floating form-floating-outline">
+                          <select class="form-select js-extra-select" id="extraCategoryId" name="extraCategory" required disabled>
+                            <option value="">Select Extra</option>
+                            <% extraCategories.forEach((item) => { %>
+                              <option
+                                value="<%= item._id %>"
+                                data-category="<%= item.category ? item.category._id : '' %>"
+                                data-subcategory="<%= item.subcategory ? item.subcategory._id : '' %>">
+                                <%= item.extraCategory %>
+                              </option>
+                            <% }) %>
+                          </select>
+                          <label for="extraCategoryId">Extra Category <span class="text-danger">*</span></label>
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <div class="product-upload-panel">
+                          <div class="product-upload-preview" id="productImagePreviewBox">
+                            <img id="productImagePreview" class="d-none" alt="Selected product preview" />
+                            <div id="productImagePlaceholder" class="product-upload-placeholder">
+                              <i class="ri ri-image-add-line"></i>
+                              <span>Product Image</span>
+                            </div>
+                          </div>
+
+                          <div class="product-upload-content">
+                            <div>
+                              <h6 class="mb-1">Product Image <span class="text-danger">*</span></h6>
+                              <p class="text-muted mb-0">Upload a clear product image. You can preview, remove, or change it before saving.</p>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2">
+                              <label for="productImage" class="btn btn-primary mb-0">
+                                <i class="ri ri-upload-2-line me-1"></i>
+                                Choose Image
+                              </label>
+                              <button type="button" class="btn btn-outline-secondary d-none" id="removeProductImage">
+                                <i class="ri ri-close-line me-1"></i>
+                                Remove
+                              </button>
+                            </div>
+
+                            <input type="file" id="productImage" name="productImage" class="visually-hidden" accept="image/png, image/jpeg, image/webp, image/gif" required />
+                            <small class="text-muted">PNG, JPG, WEBP, or GIF images are supported.</small>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-floating form-floating-outline">
+                          <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" placeholder="999" required />
+                          <label for="price">Price <span class="text-danger">*</span></label>
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <div class="border rounded p-4 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+                          <div>
+                            <h6 class="mb-1">Publish Status</h6>
+                            <small class="text-muted">Active products are ready for catalog use.</small>
+                          </div>
+                          <div class="form-check form-switch mb-0">
+                            <input class="form-check-input" type="checkbox" id="statusSwitch" name="isActive" value="true" checked />
+                            <label class="form-check-label" for="statusSwitch">Active</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-5 pt-4 border-top">
+                      <button type="reset" class="btn btn-outline-secondary">
+                        <i class="ri ri-refresh-line me-1"></i>
+                        Reset
+                      </button>
+                      <button type="submit" class="btn btn-primary" <%= categories.length && subcategories.length && extraCategories.length ? '' : 'disabled' %>>
+                        <i class="ri ri-add-circle-line me-1"></i>
+                        Save Product
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="avatar mb-3">
+                    <div class="avatar-initial bg-label-info rounded">
+                      <i class="ri ri-information-line icon-24px"></i>
+                    </div>
+                  </div>
+                  <h6 class="mb-2">Product Path</h6>
+                  <p class="text-muted mb-0">Products sit under Category, Subcategory, and Extra Category, so pricing stays tied to a precise catalog location.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%- include('../../partials/footer') %>
+        <div class="content-backdrop fade"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const imageInput = document.getElementById('productImage');
+    const imagePreview = document.getElementById('productImagePreview');
+    const imagePlaceholder = document.getElementById('productImagePlaceholder');
+    const removeButton = document.getElementById('removeProductImage');
+    const form = imageInput ? imageInput.closest('form') : null;
+    let previewUrl = '';
+
+    if (!imageInput || !imagePreview || !imagePlaceholder || !removeButton) {
+      return;
+    }
+
+    function clearPreview() {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        previewUrl = '';
+      }
+
+      imageInput.value = '';
+      imagePreview.src = '';
+      imagePreview.classList.add('d-none');
+      imagePlaceholder.classList.remove('d-none');
+      removeButton.classList.add('d-none');
+    }
+
+    imageInput.addEventListener('change', function () {
+      const file = imageInput.files && imageInput.files[0];
+
+      if (!file) {
+        clearPreview();
+        return;
+      }
+
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+
+      previewUrl = URL.createObjectURL(file);
+      imagePreview.src = previewUrl;
+      imagePreview.classList.remove('d-none');
+      imagePlaceholder.classList.add('d-none');
+      removeButton.classList.remove('d-none');
+    });
+
+    removeButton.addEventListener('click', clearPreview);
+
+    if (form) {
+      form.addEventListener('reset', function () {
+        setTimeout(clearPreview, 0);
+      });
+    }
+  });
+</script>
+
+<%- include('../../partials/scripts') %>

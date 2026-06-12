@@ -1,0 +1,160 @@
+<%- include('../../partials/header') %>
+
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <%- include('../../partials/sidebar') %>
+
+    <div class="layout-page">
+      <%- include('../../partials/navbar') %>
+
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+              <h4 class="fw-bold mb-1">
+                <span class="text-muted fw-light">Extra Categories /</span> Create Extra
+              </h4>
+              <p class="mb-0 text-muted">Add a deeper product grouping under a subcategory.</p>
+            </div>
+            <a href="/extra-category/view" class="btn btn-outline-secondary">
+              <i class="ri ri-arrow-left-line me-1"></i>
+              Back to List
+            </a>
+          </div>
+
+          <div class="row g-6">
+            <div class="col-xl-8 col-lg-9">
+              <div class="card">
+                <div class="card-header border-bottom">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="avatar">
+                      <div class="avatar-initial bg-label-primary rounded">
+                        <i class="ri ri-price-tag-3-line icon-24px"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <h5 class="mb-0">Extra Category Details</h5>
+                      <small class="text-muted">Choose category and subcategory before naming the extra category.</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-body pt-5">
+                  <form action="/extra-category/add" method="POST">
+                    <div class="row g-5">
+                      <div class="col-md-6">
+                        <div class="form-floating form-floating-outline">
+                          <select class="form-select js-category-select" id="categoryId" name="category" required>
+                            <option value="">Select Category</option>
+                            <% categories.forEach((item) => { %>
+                              <option value="<%= item._id %>"><%= item.category %></option>
+                            <% }) %>
+                          </select>
+                          <label for="categoryId">Parent Category <span class="text-danger">*</span></label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-floating form-floating-outline">
+                          <select class="form-select js-subcategory-select" id="subcategoryId" name="subcategory" required disabled>
+                            <option value="">Select Subcategory</option>
+                            <% subcategories.forEach((item) => { %>
+                              <option value="<%= item._id %>" data-category="<%= item.category ? item.category._id : '' %>"><%= item.subcategory %></option>
+                            <% }) %>
+                          </select>
+                          <label for="subcategoryId">Subcategory <span class="text-danger">*</span></label>
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <div class="form-floating form-floating-outline">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="extraCategoryName"
+                            name="extraCategory"
+                            placeholder="Smartphones"
+                            required />
+                          <label for="extraCategoryName">Extra Category Name <span class="text-danger">*</span></label>
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <div class="border rounded p-4 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+                          <div>
+                            <h6 class="mb-1">Publish Status</h6>
+                            <small class="text-muted">Active extra categories can be used immediately in product setup.</small>
+                          </div>
+                          <div class="form-check form-switch mb-0">
+                            <input class="form-check-input" type="checkbox" id="statusSwitch" name="isActive" value="true" checked />
+                            <label class="form-check-label" for="statusSwitch">Active</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-5 pt-4 border-top">
+                      <button type="reset" class="btn btn-outline-secondary">
+                        <i class="ri ri-refresh-line me-1"></i>
+                        Reset
+                      </button>
+                      <button type="submit" class="btn btn-primary" <%= categories.length && subcategories.length ? '' : 'disabled' %>>
+                        <i class="ri ri-add-circle-line me-1"></i>
+                        Save Extra
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="avatar mb-3">
+                    <div class="avatar-initial bg-label-info rounded">
+                      <i class="ri ri-information-line icon-24px"></i>
+                    </div>
+                  </div>
+                  <h6 class="mb-2">Setup Tip</h6>
+                  <p class="text-muted mb-0">Use extras for the most specific level, such as Smartphones under Mobiles.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%- include('../../partials/footer') %>
+        <div class="content-backdrop fade"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+
+<script>
+  (function () {
+    const categorySelect = document.querySelector('.js-category-select');
+    const subcategorySelect = document.querySelector('.js-subcategory-select');
+
+    if (!categorySelect || !subcategorySelect) return;
+
+    const options = Array.from(subcategorySelect.querySelectorAll('option[data-category]'));
+
+    function filterSubcategories() {
+      const categoryId = categorySelect.value;
+      subcategorySelect.value = '';
+      subcategorySelect.disabled = !categoryId;
+
+      options.forEach(function (option) {
+        option.hidden = option.dataset.category !== categoryId;
+      });
+    }
+
+    categorySelect.addEventListener('change', filterSubcategories);
+    filterSubcategories();
+  })();
+</script>
+
+<%- include('../../partials/scripts') %>
