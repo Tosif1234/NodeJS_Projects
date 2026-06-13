@@ -4,7 +4,7 @@ Welcome to **TasteNest**, a premium, modern, and pixel-perfect restaurant landin
 
 ## 📸 Preview
 
-![TasteNest Landing Page Preview](./src/assets/Screenshot/full-preview.png)
+![TasteNest Landing Page Preview](./src/assets/Screenshot/full-preview.png)....
 
 ---
 
