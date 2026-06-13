@@ -104,7 +104,7 @@ The output will be generated inside the `dist/` directory, ready to be hosted on
   * Mobile arrows hidden where all items are fully visible.
   * Bottom/left borders removed from column lists.
   * The 5th Instagram image hidden to ensure a perfect 2x2 symmetry.
-  * All action buttons wrapped in the mobile hamburger dropdown..
+  * All action buttons wrapped in the mobile hamburger dropdown.
 
 ---
 
