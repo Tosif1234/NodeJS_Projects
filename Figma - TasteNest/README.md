@@ -2,9 +2,12 @@
 
 Welcome to **TasteNest**, a premium, modern, and pixel-perfect restaurant landing page designed to wow customers at first glance! Built with top-tier design aesthetics, smooth micro-animations, and full cross-device responsiveness.
 
+## 🎥 Presentation Video
+Watch the project presentation video here: [TasteNest Presentation Video](https://drive.google.com/file/d/1zzyvKviEsU8SKePyMUWMEzVA_KosxJ3k/view?usp=sharing)
+
 ## 📸 Preview
 
-![TasteNest Landing Page Preview](./src/assets/Screenshot/full-preview.png)....
+![TasteNest Landing Page Preview](./src/assets/Screenshot/full-preview.png)
 
 ---
 
