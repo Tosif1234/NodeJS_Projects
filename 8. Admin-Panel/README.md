@@ -3,6 +3,9 @@
 A clean, practical, and feature-rich admin dashboard and multi-level catalog management system built with **Node.js**, **Express.js**, **MongoDB**, **EJS**, and **Passport.js**.  
 It includes Passport local authentication, role-based access control (RBAC), password recovery via email OTP, comprehensive CRUD management for users and catalog entities, image uploads, light/dark theme support, and a modern Materio Bootstrap dashboard UI.
 
+## 🎥 Presentation Video
+Watch the project presentation video here: [TasteNest Presentation Video](https://drive.google.com/file/d/1gZNkotNlsYA7e_5Rf1-mAfLxMoB6Q6Qq/view?usp=sharing)
+
 ## ✨ Features
 
 - 🔐 **Passport Local Authentication**: Secure login, registration, and logout using Passport Local Strategy.
