@@ -1,7 +1,24 @@
+const fs = require("fs");
+const path = require("path");
 const Category = require("../model/categorySchema");
 const Subcategory = require("../model/subcateSchema");
 const ExtraCategory = require("../model/extraCateSchema");
 const Product = require("../model/productSchema");
+
+const uploadDir = path.join(__dirname, "..", "public", "uploads");
+
+const deleteUploadedImage = async (imageName) => {
+  if (!imageName) return;
+
+  try {
+    const imagePath = path.join(uploadDir, path.basename(imageName));
+    await fs.promises.unlink(imagePath);
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      console.log("Error deleting product image:", error);
+    }
+  }
+};
 
 const getCatalogOptions = async () => {
   const [categories, subcategories, extraCategories] = await Promise.all([
@@ -176,6 +193,26 @@ exports.updateProduct = async (req, res) => {
       return res.redirect(`/products/edit/${req.params.id}`);
     }
 
+    const existingProduct = await Product.findOne({ _id: req.params.id, isDeleted: false });
+    if (!existingProduct) {
+      req.flash("error", "Product not found.");
+      return res.redirect("/products/view");
+    }
+
+    let productImage = existingProduct.productImage;
+
+    if (req.file) {
+      if (existingProduct.productImage) {
+        await deleteUploadedImage(existingProduct.productImage);
+      }
+      productImage = req.file.filename;
+    } else if (req.body.removeImage === "true") {
+      if (existingProduct.productImage) {
+        await deleteUploadedImage(existingProduct.productImage);
+      }
+      productImage = "";
+    }
+
     const updatedProduct = await Product.findOneAndUpdate(
       {
         _id: req.params.id,
@@ -187,6 +224,7 @@ exports.updateProduct = async (req, res) => {
         extraCategory,
         productName: productName || "",
         price: productPrice,
+        productImage,
         isActive: req.body.isActive ? true : false,
       }
     );
@@ -268,12 +306,18 @@ exports.restoreProduct = async (req, res) => {
 
 exports.permanentDelete = async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
       req.flash("error", "Product not found or already deleted.");
       return res.redirect("/products/trash");
     }
+
+    if (product.productImage) {
+      await deleteUploadedImage(product.productImage);
+    }
+
+    await Product.findByIdAndDelete(req.params.id);
 
     req.flash("success", "Product permanently deleted.");
     res.redirect("/products/trash");

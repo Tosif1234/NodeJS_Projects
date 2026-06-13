@@ -29,7 +29,8 @@ const uploadProductImage = (req, res, next) => {
   upload.single("productImage")(req, res, (error) => {
     if (error) {
       req.flash("error", error.message || "Unable to upload product image.");
-      return res.redirect("/products/add");
+      const redirectUrl = req.params.id ? `/products/edit/${req.params.id}` : "/products/add";
+      return res.redirect(redirectUrl);
     }
 
     next();
@@ -58,7 +59,7 @@ router.get("/add", requirePermission("products:create"), productController.addPa
 router.post("/add", requirePermission("products:create"), uploadProductImage, productController.createProduct);
 
 router.get("/edit/:id", requirePermission("products:edit"), productController.editPage);
-router.post("/edit/:id", requirePermission("products:edit"), productController.updateProduct);
+router.post("/edit/:id", requirePermission("products:edit"), uploadProductImage, productController.updateProduct);
 
 router.get("/delete/:id", requirePermission("products:delete"), productController.softDelete);
 

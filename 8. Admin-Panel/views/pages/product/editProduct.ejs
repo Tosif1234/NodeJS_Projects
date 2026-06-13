@@ -14,7 +14,7 @@
               <h4 class="fw-bold mb-1">
                 <span class="text-muted fw-light">Products /</span> Edit Product
               </h4>
-              <p class="mb-0 text-muted">Update product category path, name, pricing, and status.</p>
+              <p class="mb-0 text-muted">Update product category path, name, pricing, image, and status.</p>
             </div>
             <a href="/products/view" class="btn btn-outline-secondary">
               <i class="ri ri-arrow-left-line me-1"></i>
@@ -34,13 +34,13 @@
                     </div>
                     <div>
                       <h5 class="mb-0">Edit Details</h5>
-                      <small class="text-muted">Changes are applied after saving this form.</small>
+                      <small class="text-muted">Choose category path, add image and edit pricing details.</small>
                     </div>
                   </div>
                 </div>
 
                 <div class="card-body pt-5">
-                  <form action="/products/edit/<%= product._id %>" method="POST">
+                  <form action="/products/edit/<%= product._id %>" method="POST" enctype="multipart/form-data" id="editProductForm">
                     <div class="row g-5">
                       <div class="col-md-4">
                         <div class="form-floating form-floating-outline">
@@ -91,17 +91,52 @@
                         </div>
                       </div>
 
-                      <div class="col-md-8">
-                        <div class="form-floating form-floating-outline">
-                          <input type="text" class="form-control" id="productName" name="productName" value="<%= product.productName || '' %>" placeholder="iPhone 15" />
-                          <label for="productName">Product Name</label>
-                        </div>
-                      </div>
-
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <div class="form-floating form-floating-outline">
                           <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>" min="0" step="0.01" placeholder="999" required />
                           <label for="price">Price <span class="text-danger">*</span></label>
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <div class="product-upload-panel">
+                          <div class="product-upload-preview" id="productImagePreviewBox">
+                            <% if (product.productImage) { %>
+                              <img id="productImagePreview" src="/uploads/<%= product.productImage %>" alt="Selected product preview" />
+                              <div id="productImagePlaceholder" class="product-upload-placeholder d-none">
+                                <i class="ri ri-image-add-line"></i>
+                                <span>Product Image</span>
+                              </div>
+                            <% } else { %>
+                              <img id="productImagePreview" class="d-none" alt="Selected product preview" />
+                              <div id="productImagePlaceholder" class="product-upload-placeholder">
+                                <i class="ri ri-image-add-line"></i>
+                                <span>Product Image</span>
+                              </div>
+                            <% } %>
+                          </div>
+
+                          <div class="product-upload-content">
+                            <div>
+                              <h6 class="mb-1">Product Image</h6>
+                              <p class="text-muted mb-0">Upload a new product image. You can preview, remove, or change it before saving.</p>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2">
+                              <label for="productImage" class="btn btn-primary mb-0">
+                                <i class="ri ri-upload-2-line me-1"></i>
+                                Choose Image
+                              </label>
+                              <button type="button" class="btn btn-outline-secondary <%= product.productImage ? '' : 'd-none' %>" id="removeProductImage">
+                                <i class="ri ri-close-line me-1"></i>
+                                Remove
+                              </button>
+                            </div>
+
+                            <input type="file" id="productImage" name="productImage" class="visually-hidden" accept="image/png, image/jpeg, image/webp, image/gif" />
+                            <input type="hidden" name="removeImage" id="removeImageFlag" value="false" />
+                            <small class="text-muted">PNG, JPG, WEBP, or GIF images are supported.</small>
+                          </div>
                         </div>
                       </div>
 
@@ -120,7 +155,10 @@
                     </div>
 
                     <div class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-5 pt-4 border-top">
-                      <a href="/products/view" class="btn btn-outline-secondary">Cancel</a>
+                      <button type="reset" class="btn btn-outline-secondary">
+                        <i class="ri ri-refresh-line me-1"></i>
+                        Reset
+                      </button>
                       <button type="submit" class="btn btn-primary">
                         <i class="ri ri-save-line me-1"></i>
                         Update Product
@@ -164,5 +202,82 @@
 
   <div class="layout-overlay layout-menu-toggle"></div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const imageInput = document.getElementById('productImage');
+    const imagePreview = document.getElementById('productImagePreview');
+    const imagePlaceholder = document.getElementById('productImagePlaceholder');
+    const removeButton = document.getElementById('removeProductImage');
+    const removeImageFlag = document.getElementById('removeImageFlag');
+    const form = imageInput ? imageInput.closest('form') : null;
+    let previewUrl = '';
+
+    if (!imageInput || !imagePreview || !imagePlaceholder || !removeButton || !removeImageFlag) {
+      return;
+    }
+
+    function clearPreview() {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        previewUrl = '';
+      }
+
+      imageInput.value = '';
+      imagePreview.src = '';
+      imagePreview.classList.add('d-none');
+      imagePlaceholder.classList.remove('d-none');
+      removeButton.classList.add('d-none');
+      removeImageFlag.value = 'true';
+    }
+
+    imageInput.addEventListener('change', function () {
+      const file = imageInput.files && imageInput.files[0];
+
+      if (!file) {
+        return;
+      }
+
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+
+      previewUrl = URL.createObjectURL(file);
+      imagePreview.src = previewUrl;
+      imagePreview.classList.remove('d-none');
+      imagePlaceholder.classList.add('d-none');
+      removeButton.classList.remove('d-none');
+      removeImageFlag.value = 'false';
+    });
+
+    removeButton.addEventListener('click', clearPreview);
+
+    if (form) {
+      form.addEventListener('reset', function () {
+        setTimeout(function() {
+          if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+            previewUrl = '';
+          }
+          // Restore to initial state of product image
+          <% if (product.productImage) { %>
+            imagePreview.src = '/uploads/<%= product.productImage %>';
+            imagePreview.classList.remove('d-none');
+            imagePlaceholder.classList.add('d-none');
+            removeButton.classList.remove('d-none');
+            removeImageFlag.value = 'false';
+          <% } else { %>
+            imagePreview.src = '';
+            imagePreview.classList.add('d-none');
+            imagePlaceholder.classList.remove('d-none');
+            removeButton.classList.add('d-none');
+            removeImageFlag.value = 'false';
+          <% } %>
+          imageInput.value = '';
+        }, 0);
+      });
+    }
+  });
+</script>
 
 <%- include('../../partials/scripts') %>
