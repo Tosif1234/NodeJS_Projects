@@ -22,10 +22,6 @@
 
 The **Smart Society Management System** is a robust web application built to digitize and simplify the daily administrative and community tasks within a housing society. It bridges the gap between residents, committee members, and security personnel by providing a unified platform for communication, financial management, visitor tracking, and maintenance.
 
-> **The Problem:** Traditional society management relies on manual ledgers, paper logs, WhatsApp groups, and fragmented communication, leading to delayed maintenance, financial discrepancies, and security vulnerabilities.
-> 
-> **The Solution:** A centralized, transparent, and role-based platform that automates billing, secures visitor entry, tracks complaints, and fosters community engagement.
-
 ---
 
 ## ✨ Key Features
