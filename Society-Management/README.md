@@ -288,13 +288,13 @@ Your application should now be running at `http://localhost:5173`. You can regis
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
-Feel free to check the [issues page](https://github.com/your-username/smart-society-management/issues).
+Feel free to check the [issues page](https://github.com/Tosif1234).
 
 ---
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Tosif1234) file for details.
 
 ---
 
